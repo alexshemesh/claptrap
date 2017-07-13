@@ -1,0 +1,44 @@
+sudo: required
+language: go
+go:
+- 1.8.3
+- tip
+before_install:
+- GLIDE_OS_ARCH=`go env GOHOSTOS`-`go env GOHOSTARCH`
+- GLIDE_TAG=$(curl -s https://glide.sh/version)
+- GLIDE_LATEST_RELEASE_URL="https://github.com/Masterminds/glide/releases/download/${GLIDE_TAG}/glide-${GLIDE_TAG}-${GLIDE_OS_ARCH}.tar.gz"
+- wget ${GLIDE_LATEST_RELEASE_URL} -O /tmp/glide.tar.gz
+- mkdir /tmp/glide
+- tar --directory=/tmp/glide -xvf /tmp/glide.tar.gz
+- export PATH=$PATH:/tmp/glide/${GLIDE_OS_ARCH}
+- sudo apt-get update -q
+- sudo apt-get install upx -y
+install: glide install
+after_success:
+- |-
+  echo "After Success:"
+  echo $TRAVIS_TAG
+  echo $TRAVIS_GO_VERSION
+  if [ "$TRAVIS_TAG" != "" ] && [ "$TRAVIS_GO_VERSION" == "1.8.3" ]
+  then
+    CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w -X main.Version=$TRAVIS_TAG" -o claptrap-linux-amd64
+    CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w -X main.Version=$TRAVIS_TAG" -o claptrap-darwin-amd64
+    CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -ldflags="-s -w -X main.Version=$TRAVIS_TAG" -o claptrap-windows-amd64
+  fi
+script: go test --cover $(go list ./... | grep -v '/vendor/')
+
+deploy:
+  provider: releases
+  skip_cleanup: true
+  api_key:
+    secure: P9oOzuUw0js8nTgZbb3Ltn+oSt7XbkZQhuSFmSgGYpW+nyvFjt8+Dyr5hswaVsbXl/uJuiMailj+Xy+vmYUFdAkbMOc+4S4Iy1Rt6gKih0SrNWAx/cuWhq1PsRKca5DhSrHXQcUEwYwfxmhin9ZD4qav1oefnKo5c4Ke6rr9ItcCyl6aZyOZpN8l6rljKh2QtxG00ubBhKIJBiA0Kfm7MT2sp4pp61vrzLQGCbnUlDFQa1npUFXBorNQ8csrlSQxuVdoSkh/xGyLSC8EnoU0pltt+Dma1c/L+FR6BFl8GFl4L3RMTvFB/ukjieXqjFEBNWMe/fHYTTzTLBrLoZ/OK9ppkKsAIGrp/Ch5YWcEfpIGNlqf6Y6ZsPNN2WYa9g/zKYbO3iqLt1ID9oBFz7GAvrjQCOst3Hp7WVE/zpeheJUVeYEkL9z5UKSG98TLO6bPB7KraQuLUcLqzPOBqbqjPjyV3PWpMJEeA6Q1aWwt9tRwhuvQF9nEFbT6JmoUIYgerBxn7aA0JZi/SBM6FXwR0VAL6w2jLVHf1c5ZuJRjyoCwhrSZQoFVNLKOCWewmBz1Kof63VEaL/1NQhg25n5oV6iGIW3/g0q4VImpMvAkH+U8D3sYFw8vnTe5yZv+YsaCLnImQFZDMHJjoCQVcRob9w3v2mtyxdaTlYEFBwteFv0=
+    file:
+    - claptrap-linux-amd64
+    - claptrap-darwin-amd64
+    - claptrap-windows-amd64
+  on:
+    repo: alexshemesh/claptrap
+    condition: $TRAVIS_GO_VERSION = 1.8.3
+    tags: true
+
+
