@@ -1,2 +1,5 @@
 package: github.com/alexshemesh/claptrap
-import: []
+import:
+- package: github.com/logrusorgru/aurora
+- package: github.com/Sirupsen/logrus
+  version: ~1.0.2
