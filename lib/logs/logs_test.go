@@ -13,6 +13,7 @@ func TestNewLogger(t *testing.T) {
 
 func Test_NewLoggerJSON(t *testing.T) {
 
+	oldosGetenv := OsGetenv
 	// as we are exiting, revert sqlOpen back to oldSqlOpen at end of function
 	defer func() { OsGetenv = oldosGetenv }()
 	var newVal = func(key string) string {
