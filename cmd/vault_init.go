@@ -18,12 +18,16 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/alexshemesh/claptrap/lib/logs"
 	"os"
-	"net/url"
-	"path"
-	"github.com/alexshemesh/claptrap/lib/http"
-	"fmt"
+		"fmt"
+	"github.com/alexshemesh/claptrap/lib/vault"
+	"runtime"
 )
 
+type VaultSettings struct {
+	VaultURL string `json:"vaulturl"`
+	Secret string `json:"secret"`
+	Token string `json:"token"`
+}
 // initCmd represents the init command
 var initCmd = &cobra.Command{
 	Use:   "init",
@@ -32,7 +36,7 @@ var initCmd = &cobra.Command{
 	if vault is already intialized - nothing should happen.
 	Confiuration information will be saved into Viper configuration file`,
 	Run: func(cmd *cobra.Command, args []string) {
-		log := *logs.NewLogger("vault")
+		log := *logs.NewLogger("vault init")
 		err := runInit(log, VaultAddr)
 		if err != nil {
 			log.Error(err)
@@ -46,23 +50,36 @@ func init() {
 	vaultCmd.AddCommand(initCmd)
 }
 
-func runInit( log logs.Logger , vaultAddr string) ( err error ){
-	http := httpClient.NewHttpExecutor()
-	body :=`{"secret_shares":1,"secret_threshold":1}`
-
-	var u *url.URL
-	u, err = url.Parse(vaultAddr)
-	u.Path = path.Join(u.Path, "v1", "sys", "init")
-	var response []byte
-	response, err = http.Get().Execute( u.String(), nil, []byte(body) )
-	if err == nil {
-		if response == nil {
-			err = fmt.Errorf("No response")
-			log.Error(err)
-		}else{
-			log.Log("Vault initialized")
-		}
+func UserHomeDir() string {
+	env := "HOME"
+	if runtime.GOOS == "windows" {
+		env = "USERPROFILE"
+	} else if runtime.GOOS == "plan9" {
+		env = "home"
 	}
+	return os.Getenv(env)
+}
 
+func runInit( log logs.Logger , vaultAddr string) ( err error ){
+
+	vault := vault.NewVaultClient(vaultAddr,*logs.NewLogger("root"))
+	var initialized bool
+	initialized,err = vault.IsInitialized()
+	if initialized == false {
+		keys,token,err := vault.Initialize()
+		if err == nil {
+			vault.Unseal(keys)
+
+			log.Log(fmt.Sprintf("Vault at % initialized and unsealed", vaultAddr))
+			log.Log("Save these keys in safe location. You will not be able to retrieve them from server againg!!!")
+			for i, key := range (keys) {
+				log.Log(fmt.Sprintf("\tKey %d: %s", i, key))
+			}
+			log.Log(fmt.Sprintf("Add following lines to your %s/.clpatrap.yaml configuration file\nvault:\n  url: %s\n  token: %s\n", UserHomeDir(),vaultAddr,token))
+
+		}
+	} else {
+		err = fmt.Errorf("Already initialized")
+	}
 	return err
 }

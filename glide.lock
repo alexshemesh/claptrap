@@ -1,5 +1,5 @@
-hash: 8bc635c9f4e9c0e83ca347cd5dd88ba31a0d5695a68b1e39c726147523f49b4c
-updated: 2017-07-13T21:02:05.05603425+03:00
+hash: 3e784303d24c5435c7c9a97867f14da9f035213cfaca9e4f72d04bb35c0d1b19
+updated: 2017-07-23T21:44:26.735519655+03:00
 imports:
 - name: github.com/fsnotify/fsnotify
   version: 4da3e2cfbabc9f751898f250b49f2439785783a1
@@ -16,6 +16,8 @@ imports:
   - json/token
 - name: github.com/inconshreveable/mousetrap
   version: 76626ae9c91c4f2a10f34cad8ce83ea42c93bb75
+- name: github.com/Jeffail/gabs
+  version: 2a3aa15961d5fee6047b8151b67ac2f08ba2c48c
 - name: github.com/logrusorgru/aurora
   version: 962a6974312dde57d1f6f5738b4f83e1af9f38a4
 - name: github.com/magiconair/properties
@@ -53,4 +55,6 @@ imports:
   - unicode/norm
 - name: gopkg.in/yaml.v2
   version: cd8b52f8269e0feb286dfeef29f8fe4d5b397e0b
-testImports: []
+testImports:
+- name: github.com/bouk/monkey
+  version: 5dace501dd6dad5b369748946db553903c8e839c

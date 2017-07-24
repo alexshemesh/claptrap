@@ -3,3 +3,5 @@ import:
 - package: github.com/logrusorgru/aurora
 - package: github.com/Sirupsen/logrus
   version: ~1.0.2
+- package: github.com/Jeffail/gabs
+  version: ~1.0.0

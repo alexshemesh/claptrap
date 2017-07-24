@@ -66,6 +66,8 @@ func (this HttpClient) Execute(url string, headers map[string]string, body []byt
 		req.Header.Set("Content-Type", this.contentType)
 
 		resp, err := client.Do(req)
+		this.log.Log(fmt.Sprintf("%d %s",resp.StatusCode,resp.Status ))
+
 		defer func() {
 			if resp != nil {
 				resp.Body.Close()
