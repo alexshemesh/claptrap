@@ -31,7 +31,7 @@ deploy:
   provider: releases
   skip_cleanup: true
   api_key:
-    secure: P9oOzuUw0js8nTgZbb3Ltn+oSt7XbkZQhuSFmSgGYpW+nyvFjt8+Dyr5hswaVsbXl/uJuiMailj+Xy+vmYUFdAkbMOc+4S4Iy1Rt6gKih0SrNWAx/cuWhq1PsRKca5DhSrHXQcUEwYwfxmhin9ZD4qav1oefnKo5c4Ke6rr9ItcCyl6aZyOZpN8l6rljKh2QtxG00ubBhKIJBiA0Kfm7MT2sp4pp61vrzLQGCbnUlDFQa1npUFXBorNQ8csrlSQxuVdoSkh/xGyLSC8EnoU0pltt+Dma1c/L+FR6BFl8GFl4L3RMTvFB/ukjieXqjFEBNWMe/fHYTTzTLBrLoZ/OK9ppkKsAIGrp/Ch5YWcEfpIGNlqf6Y6ZsPNN2WYa9g/zKYbO3iqLt1ID9oBFz7GAvrjQCOst3Hp7WVE/zpeheJUVeYEkL9z5UKSG98TLO6bPB7KraQuLUcLqzPOBqbqjPjyV3PWpMJEeA6Q1aWwt9tRwhuvQF9nEFbT6JmoUIYgerBxn7aA0JZi/SBM6FXwR0VAL6w2jLVHf1c5ZuJRjyoCwhrSZQoFVNLKOCWewmBz1Kof63VEaL/1NQhg25n5oV6iGIW3/g0q4VImpMvAkH+U8D3sYFw8vnTe5yZv+YsaCLnImQFZDMHJjoCQVcRob9w3v2mtyxdaTlYEFBwteFv0=
+    secure: SvXwnmtTcEJTKtjtbEQHi71+CblEGjNqFQLbUSqk+Y9fe49k9PmaMR6ROlI629FqGIoOIKIhHK5NKPC6lC18HlOV1cwgH6fBeZUk2VmuKSJwpJRUmEAk9FkMmdZVY0C3OxiDlt7vnISpw55iGX52VC83J3o5XNjlwbbd1Wmi9rEk4ot9WhoZCoTZxxxiNUji/QQt20905ZNmxpAfe++gIE9UIV4vP3uArDQ2Bk9pqclXAFBpb8+8eFxoYHkl/fNoUglAmINj3osMxNAn9UQ5luDGu4++XxXZJPwEg1q4cJQcJNZZdjNYni2VvDO+gJLgEY2opV4auU+4RKqR5iwIVk0ICOcnOvGH/KK8KEpP/wDgWxr1xAlZTUW5jZxLTmCCax4S14rPOFJVr+F6x6RYwa3+98JBi/WM708zqf2PDBaphl7Z4c4iIH39nogRk2Gj/OqyqZLmkDcfXloC5/Bl4tPGEeT2IuxsaICWEcusngTlZNDWYs7BxOIKkqMo/ZWsAahMSPTejVjZMjP61/JQVwMdHtSfzeBB80jLxZJFBnABhAzr3v8iSlSdRtlW27qk+eWYhmGI77JmHw0DXQ1C/a9l5VGn/XDCbct6uEl3lrYokBqe15DfNkPsqMVJlUGJGQOUSoUS9pNxzN6y0ZwT3UT0GOGCLatJMll48ARiwTw=
     file:
     - claptrap-linux-amd64
     - claptrap-darwin-amd64
@@ -40,5 +40,3 @@ deploy:
     repo: alexshemesh/claptrap
     condition: $TRAVIS_GO_VERSION = 1.8.3
     tags: true
-
-
