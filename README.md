@@ -1,4 +1,4 @@
-![build](https://travis-ci.org/alexshemesh/claptrap.svg?branch=masterr)
+![build](https://travis-ci.org/alexshemesh/claptrap.svg?branch=master)
 # claptrap
 General fintech bot
 
