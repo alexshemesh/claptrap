@@ -143,7 +143,7 @@ func (this VaultClient)Seal() ( err error){
 	return err
 }
 
-func (this VaultClient)SetSecret(secretPath string, secretValue string) ( err error){
+func (this VaultClient) SetVaue(secretPath string, secretValue string) ( err error){
 
 	dataToSet := DataToSet{secretValue}
 	this.log.Debug("Set secret " + secretPath)
@@ -162,7 +162,7 @@ func (this VaultClient)SetSecret(secretPath string, secretValue string) ( err er
 	return err
 }
 
-func (this VaultClient)GetSecret(secretPath string) (retVal string, err error){
+func (this VaultClient) GetValue(secretPath string) (retVal string, err error){
 	if this.token == "" {
 		err = fmt.Errorf("Not authorized")
 	} else {

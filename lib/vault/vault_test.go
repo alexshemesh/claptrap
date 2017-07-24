@@ -213,7 +213,7 @@ func Test_vaulSetSecret(t *testing.T){
 
 	vault := NewVaultClient(ts.URL,*logs.NewLogger("root"))
 	vault.Auth("token")
-	err := vault.SetSecret(path,"secretdata")
+	err := vault.SetVaue(path,"secretdata")
 	if err != nil {
 		t.Error(err)
 	}
@@ -244,7 +244,7 @@ func Test_vaulGetSecret(t *testing.T){
 
 	vault := NewVaultClient(ts.URL,*logs.NewLogger("root"))
 	vault.Auth("token")
-	response,err := vault.GetSecret(path)
+	response,err := vault.GetValue(path)
 	if err != nil {
 		t.Error(err)
 	}
