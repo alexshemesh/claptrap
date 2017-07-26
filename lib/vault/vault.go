@@ -10,6 +10,7 @@ import (
 
 	"encoding/json"
 	"github.com/alexshemesh/claptrap/lib/logs"
+	"github.com/spf13/viper"
 )
 
 type DataToSet struct {
@@ -20,6 +21,14 @@ type VaultClient struct {
 	ServerURL string
 	token string
 	log logs.Logger
+}
+
+func NewVaultClientInitialized( logPar logs.Logger) (retVal *VaultClient){
+	vaultAddr := viper.Get("vault.url").(string)
+	vaultToken := viper.Get("vault.token").(string)
+
+	retVal = &VaultClient{ServerURL: vaultAddr, log: *logPar.SubLogger("vault"), token: vaultToken}
+	return retVal
 }
 
 func NewVaultClient(serverURL string, logPar logs.Logger) (retVal *VaultClient){
@@ -58,9 +67,7 @@ func (this VaultClient)IsSealed() (retVal bool, err error){
 			retVal = jsonParsed.Path("sealed").Data().(bool)
 		}
 	}
-	if err == nil {
-		this.log.Log("Vault unsealed successfully")
-	}
+
 	return retVal,err
 }
 

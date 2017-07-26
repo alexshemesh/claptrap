@@ -1,5 +1,5 @@
-hash: 3e784303d24c5435c7c9a97867f14da9f035213cfaca9e4f72d04bb35c0d1b19
-updated: 2017-07-23T21:44:26.735519655+03:00
+hash: 4809cb9874fa6fe19316f72b30bf85688130279cc9f81e98daf0d9372a3ae4e1
+updated: 2017-07-27T00:34:11.765991413+03:00
 imports:
 - name: github.com/fsnotify/fsnotify
   version: 4da3e2cfbabc9f751898f250b49f2439785783a1
@@ -44,6 +44,8 @@ imports:
   version: f1d95a35e132e8a1868023a08932b14f0b8b8fcb
 - name: github.com/spf13/viper
   version: 0967fc9aceab2ce9da34061253ac10fb99bba5b2
+- name: github.com/technoweenie/multipartstreamer
+  version: a90a01d73ae432e2611d178c18367fbaa13e0154
 - name: golang.org/x/sys
   version: 9ccfe848b9db8435a24c424abbc07a921adf1df5
   subpackages:
@@ -53,6 +55,8 @@ imports:
   subpackages:
   - transform
   - unicode/norm
+- name: gopkg.in/telegram-bot-api.v4
+  version: 0a57807db79efce7f6719fbb2c0e0f83fda79aec
 - name: gopkg.in/yaml.v2
   version: cd8b52f8269e0feb286dfeef29f8fe4d5b397e0b
 testImports:
