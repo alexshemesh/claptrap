@@ -33,9 +33,9 @@ deploy:
   api_key:
     secure: SvXwnmtTcEJTKtjtbEQHi71+CblEGjNqFQLbUSqk+Y9fe49k9PmaMR6ROlI629FqGIoOIKIhHK5NKPC6lC18HlOV1cwgH6fBeZUk2VmuKSJwpJRUmEAk9FkMmdZVY0C3OxiDlt7vnISpw55iGX52VC83J3o5XNjlwbbd1Wmi9rEk4ot9WhoZCoTZxxxiNUji/QQt20905ZNmxpAfe++gIE9UIV4vP3uArDQ2Bk9pqclXAFBpb8+8eFxoYHkl/fNoUglAmINj3osMxNAn9UQ5luDGu4++XxXZJPwEg1q4cJQcJNZZdjNYni2VvDO+gJLgEY2opV4auU+4RKqR5iwIVk0ICOcnOvGH/KK8KEpP/wDgWxr1xAlZTUW5jZxLTmCCax4S14rPOFJVr+F6x6RYwa3+98JBi/WM708zqf2PDBaphl7Z4c4iIH39nogRk2Gj/OqyqZLmkDcfXloC5/Bl4tPGEeT2IuxsaICWEcusngTlZNDWYs7BxOIKkqMo/ZWsAahMSPTejVjZMjP61/JQVwMdHtSfzeBB80jLxZJFBnABhAzr3v8iSlSdRtlW27qk+eWYhmGI77JmHw0DXQ1C/a9l5VGn/XDCbct6uEl3lrYokBqe15DfNkPsqMVJlUGJGQOUSoUS9pNxzN6y0ZwT3UT0GOGCLatJMll48ARiwTw=
     file:
-    - claptrap-linux-amd64
-    - claptrap-darwin-amd64
-    - claptrap-windows-amd64
+      - claptrap-linux-amd64
+      - claptrap-darwin-amd64
+      - claptrap-windows-amd64
   on:
     repo: alexshemesh/claptrap
     condition: $TRAVIS_GO_VERSION = 1.8.3
