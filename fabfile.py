@@ -1,4 +1,5 @@
 import sys
+import os
 
 sys.path.insert(0, r'./libs')
 
@@ -9,7 +10,7 @@ from fabric.state import connections
 #env.hosts = ['ubuntu@staging-agent-1.wixcore3.com']
 #env.key_filename=['~/.ssh/core3-ci.pem']
 
-env.hosts = ['vagrant@192.168.1.79']
+env.hosts = ['vagrant@' + os.environ['TARGET_SERVER']]
 env.user = 'vagrant'
 env.password = 'vagrant'
 
