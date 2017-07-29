@@ -23,6 +23,7 @@ import (
 
 	"github.com/alexshemesh/claptrap/lib/vault"
 	"github.com/alexshemesh/claptrap/lib/telegram"
+	"github.com/alexshemesh/claptrap/lib/contracts"
 )
 
 // pingCmd represents the ping command
@@ -35,14 +36,14 @@ var pingCmd = &cobra.Command{
 		log := *logs.NewLogger("telegram ping")
 
 		vaultClient := vault.NewVaultClientInitialized(log)
-		token,err := vaultClient.GetValue("telegram/token")
-		if err == nil {
-			err := runPing(log, token)
-			if err != nil {
-				log.Error(err)
-				os.Exit(-1)
-			}
+
+
+		err := runPing(log, *vaultClient)
+		if err != nil {
+			log.Error(err)
+			os.Exit(-1)
 		}
+
 		os.Exit(0 )
 	},
 }
@@ -52,8 +53,8 @@ func init() {
 
 }
 
-func runPing(log logs.Logger, token string)(err error){
-	telegramBot := telegram.NewTelegramBot(log,token)
+func runPing(log logs.Logger, settingsHandler contracts.Settings)(err error){
+	telegramBot := telegram.NewTelegramBot(log,settingsHandler)
 	err = telegramBot.Connect()
 	if err == nil{
 		err = telegramBot.Ping()

@@ -150,7 +150,7 @@ func (this VaultClient)Seal() ( err error){
 	return err
 }
 
-func (this VaultClient) SetVaue(secretPath string, secretValue string) ( err error){
+func (this VaultClient) SetValue(secretPath string, secretValue string) ( err error){
 
 	dataToSet := DataToSet{secretValue}
 	this.log.Debug("Set secret " + secretPath)
@@ -191,3 +191,5 @@ func (this VaultClient) GetValue(secretPath string) (retVal string, err error){
 	}
 	return retVal,err
 }
+
+

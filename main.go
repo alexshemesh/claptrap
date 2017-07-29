@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/alexshemesh/claptrap/cmd"
 	"github.com/spf13/viper"
-
 	"io/ioutil"
 	"path"
 )
@@ -16,10 +15,10 @@ func main() {
 		print("Some data\n" )
 	}
 	viper.SetConfigType("yaml")
-	viper.SetConfigName(".claptrap") // name of config file (without extension)
-	viper.AddConfigPath(homeFolder)  // call multiple times to add many search paths
-	err := viper.ReadInConfig() // Find and read the config file
-	if err != nil { // Handle errors reading the config file
+	viper.SetConfigName(".claptrap")
+	viper.AddConfigPath(homeFolder)
+	err := viper.ReadInConfig()
+	if err != nil {
 		print("No configuration file found\n" + err.Error() + "\n")
 	}
 	print("Version:" + Version + "\n")

@@ -3,6 +3,10 @@ package httpClient
 import (
 	"testing"
 	"github.com/bouk/monkey"
+	"io"
+	"net/http/httptest"
+	"net/http"
+
 )
 
 func Test_NewHttpExecutor(t *testing.T){
@@ -47,3 +51,45 @@ func Test_GetPutPostDelete( t *testing.T) {
 	}
 }
 
+
+func Test_NILForHeder(t *testing.T){
+	echoHandler := func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+
+		io.WriteString(w, `200 OK`)
+	}
+
+	// create test server with handler
+	ts := httptest.NewServer(http.HandlerFunc(echoHandler))
+	defer ts.Close()
+
+
+	obj := NewHttpExecutor()
+	_,err := obj.Get().Execute(ts.URL,nil,nil)
+
+	if err != nil {
+		t.Error(err)
+	}
+}
+
+func Test_HttpErrorToRealError(t *testing.T){
+		echoHandler := func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(http.StatusBadRequest)
+		}
+
+		// create test server with handler
+		ts := httptest.NewServer(http.HandlerFunc(echoHandler))
+		defer ts.Close()
+
+
+		obj := NewHttpExecutor()
+		_,err := obj.Get().Execute(ts.URL,nil,nil)
+
+		if err == nil {
+			t.Errorf("Cannot detect HTTP error")
+		}
+
+		if err.Error() != "400 Bad Request" {
+			t.Errorf("Wrong error code. Suppose to be 400")
+		}
+}

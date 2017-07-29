@@ -14,8 +14,7 @@ func Test_vaultIsInitialized_true(t *testing.T){
 		if r.URL.Path == "/v1/sys/init" {
 			io.WriteString(w, `{"initialized":true}`)
 		}else{
-			io.WriteString(w, `500 Wrong request path`)
-			r.Response.StatusCode = 500
+			w.WriteHeader(http.StatusInternalServerError)
 		}
 	}
 
@@ -39,8 +38,7 @@ func Test_vaultIsInitialized_false(t *testing.T){
 		if r.URL.Path == "/v1/sys/init" {
 			io.WriteString(w, `{"initialized":false}`)
 		}else{
-			io.WriteString(w, `500 Wrong request path`)
-			r.Response.StatusCode = 500
+			w.WriteHeader(http.StatusInternalServerError)
 		}
 	}
 
@@ -63,8 +61,7 @@ func Test_vaulIsSealed_true(t *testing.T){
 		if r.URL.Path == "/v1/sys/seal-status" {
 			io.WriteString(w, `{"sealed":true}`)
 		}else{
-			io.WriteString(w, `500 Wrong request path`)
-			r.Response.StatusCode = 500
+			w.WriteHeader(http.StatusInternalServerError)
 		}
 	}
 
@@ -87,8 +84,7 @@ func Test_vaulInitialize(t *testing.T){
 		if r.URL.Path == "/v1/sys/init" && r.Method == "PUT" {
 			io.WriteString(w, `{"keys":["12345678123456781234567807582a552e10c713423f43d3ebfcdaf80a18b83f"],"keys_base64":["somekeymashupverylong"],"root_token":"12345678-ffff-ffff-ffff-fe38b7453f03"}`)
 		}else{
-			io.WriteString(w, `500 Wrong request path`)
-			r.Response.StatusCode = 500
+			w.WriteHeader(http.StatusInternalServerError)
 		}
 	}
 
@@ -115,8 +111,7 @@ func Test_vaulUnseal(t *testing.T){
 		if r.URL.Path == "/v1/sys/unseal" && r.Method == "PUT" {
 			io.WriteString(w, `200 OK`)
 		}else{
-			io.WriteString(w, `500 Wrong request path`)
-			r.Response.StatusCode = 500
+			w.WriteHeader(http.StatusInternalServerError)
 		}
 	}
 
@@ -138,13 +133,11 @@ func Test_vaulSeal_notauthorized(t *testing.T){
 			if token != "" {
 				io.WriteString(w, `200 OK`)
 			}else{
-				io.WriteString(w, `404 No token`)
-				r.Response.StatusCode = 404
+				w.WriteHeader(http.StatusNotFound)
 			}
 
 		}else{
-			io.WriteString(w, `500 Wrong request path`)
-			r.Response.StatusCode = 500
+			w.WriteHeader(http.StatusInternalServerError)
 		}
 	}
 
@@ -166,13 +159,11 @@ func Test_vaulSeal(t *testing.T){
 			if token != "" {
 				io.WriteString(w, `200 OK`)
 			}else{
-				io.WriteString(w, `404 No token`)
-				r.Response.StatusCode = 404
+				w.WriteHeader(http.StatusNotFound)
 			}
 
 		}else{
-			io.WriteString(w, `500 Wrong request path`)
-			r.Response.StatusCode = 500
+			w.WriteHeader(http.StatusInternalServerError)
 		}
 	}
 
@@ -197,13 +188,11 @@ func Test_vaulSetSecret(t *testing.T){
 			if token != "" {
 				io.WriteString(w, `200 OK`)
 			}else{
-				io.WriteString(w, `404 No token`)
-				r.Response.StatusCode = 404
+				w.WriteHeader(http.StatusNotFound)
 			}
 
 		}else{
-			io.WriteString(w, `500 Wrong request path`)
-			r.Response.StatusCode = 500
+			w.WriteHeader(http.StatusInternalServerError)
 		}
 	}
 
@@ -213,7 +202,7 @@ func Test_vaulSetSecret(t *testing.T){
 
 	vault := NewVaultClient(ts.URL,*logs.NewLogger("root"))
 	vault.Auth("token")
-	err := vault.SetVaue(path,"secretdata")
+	err := vault.SetValue(path,"secretdata")
 	if err != nil {
 		t.Error(err)
 	}
@@ -228,13 +217,11 @@ func Test_vaulGetSecret(t *testing.T){
 			if token != "" {
 				io.WriteString(w, secretValue)
 			}else{
-				io.WriteString(w, `404 No token`)
-				r.Response.StatusCode = 404
+				w.WriteHeader(http.StatusNotFound)
 			}
 
 		}else{
-			io.WriteString(w, `500 Wrong request path`)
-			r.Response.StatusCode = 500
+			w.WriteHeader(http.StatusInternalServerError)
 		}
 	}
 

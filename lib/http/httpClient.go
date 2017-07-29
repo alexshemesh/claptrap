@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"math/rand"
 	"github.com/alexshemesh/claptrap/lib/logs"
+	"errors"
 )
 
 type HttpClient struct {
@@ -55,6 +56,11 @@ func (this HttpClient) Execute(url string, headers map[string]string, body []byt
 	requestID := calcRequestID()
 
 	client := &http.Client{}
+
+	if headers == nil {
+		headers = make(map[string]string)
+	}
+
 	this.log.Debug(fmt.Sprintf("Executing request URL: %s, headers: %s, body: %s", url, headers, body))
 
 	req, err := http.NewRequest(this.requestType, url, bytes.NewBuffer([]byte(body)))
@@ -64,8 +70,11 @@ func (this HttpClient) Execute(url string, headers map[string]string, body []byt
 		}
 		this.log.Debug("Set content type to be " + this.contentType)
 		req.Header.Set("Content-Type", this.contentType)
-
-		resp, err := client.Do(req)
+		var resp *http.Response
+		resp, err = client.Do(req)
+		if resp.StatusCode >= 400 {
+			err = errors.New( resp.Status )
+		}
 		this.log.Log(fmt.Sprintf("%d %s",resp.StatusCode,resp.Status ))
 
 		defer func() {
@@ -73,6 +82,7 @@ func (this HttpClient) Execute(url string, headers map[string]string, body []byt
 				resp.Body.Close()
 			}
 		}()
+
 
 		if err != nil {
 			this.log.Error(fmt.Errorf("[%d] HTTP request failed", requestID))

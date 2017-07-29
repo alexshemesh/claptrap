@@ -25,9 +25,7 @@ func NewLogger(name string) *Logger {
 	obj.CS = aurora.NewAurora(colorsFlag)
 	obj.internalLog = logrus.New()
 	obj.internalLog.Level = logrus.DebugLevel
-	if ( os.Getenv("C3LOGFMT") == "JSON" ) {
-		obj.internalLog.Formatter = &logrus.JSONFormatter{}
-	}
+
 	obj.prefix = name
 	return obj
 }
