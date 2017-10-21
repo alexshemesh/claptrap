@@ -177,3 +177,4 @@ func Test_GetMessages_404(t *testing.T){
 		t.Error("Settings where not set properly")
 	}
 }
+

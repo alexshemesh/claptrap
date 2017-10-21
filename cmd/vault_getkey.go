@@ -66,7 +66,7 @@ func init() {
 
 func runGetKey(log logs.Logger, vaultAddr string, vaultToken string,secretPath string)(err error){
 	vault := vault.NewVaultClient(vaultAddr,log)
-	vault.Auth(vaultToken)
+	vault.SetToken(vaultToken)
 	var secretValue string
 	secretValue,err = vault.GetValue(secretPath)
 	if err == nil {

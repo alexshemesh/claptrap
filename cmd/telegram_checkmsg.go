@@ -24,9 +24,8 @@ import (
 	"github.com/alexshemesh/claptrap/lib/telegram"
 	"gopkg.in/telegram-bot-api.v4"
 	"github.com/alexshemesh/claptrap/lib/contracts"
-	"github.com/alexshemesh/claptrap/lib/kuna"
-	"strings"
-	"time"
+
+	"github.com/alexshemesh/claptrap/lib/telegram/dispatcher"
 )
 
 // checkmsgCmd represents the checkmsg command
@@ -39,7 +38,7 @@ var checkmsgCmd = &cobra.Command{
 		log := *logs.NewLogger("telegram checkmsg")
 
 		vaultClient := vault.NewVaultClientInitialized(log)
-		err := runCheckMsg(log, vaultClient)
+		err := runCheckMsg(log, vaultClient,vaultClient)
 		if err != nil {
 			log.Error(err)
 			os.Exit(-1)
@@ -52,60 +51,24 @@ func init() {
 	telegramCmd.AddCommand(checkmsgCmd)
 }
 
-func procCommand(log logs.Logger,bot telegram.TelegramBot, msg tgbotapi.Message )(err error){
-	if msg.Command() == "kuna" {
-		arguments := strings.Split( msg.CommandArguments(), " ")
-		if len(arguments) > 0 {
-			if arguments[0] == "orders_book" {
-				reponseText := fmt.Sprintf( "Hey there %s.I got your command for kuna market orderds book. Executing. Hold on.", telegram.GetMsgContactTitle(msg) )
-				newMsg := tgbotapi.NewMessage(msg.Chat.ID, reponseText)
-				newMsg.ReplyToMessageID = msg.MessageID
-				err = bot.Send(newMsg)
+func procCommandv2(log logs.Logger,bot telegram.TelegramBot, msg tgbotapi.Message ,auth contracts.Auth)(err error){
 
-				startTime := time.Now()
-				kunaClient := kuna.NewKunaClient(log)
-
-				book,err := kunaClient.GetOrdersBook()
-
-				if err == nil {
-					reponseText = "Asks\n"
-					for i, order := range (book.Asks){
-						reponseText = reponseText + fmt.Sprintf("\t%d %s %s %s %s\n", i, order.Side, order.OrdType, order.Price,  order.Volume )
-					}
-					reponseText = reponseText + "Bids\n"
-					for i, order := range (book.Bids) {
-						reponseText = reponseText + fmt.Sprintf("\t%d %s %s %s %s\n", i, order.Side, order.OrdType, order.Price, order.Volume)
-					}
-
-				}else{
-					reponseText = reponseText + "Error: " + err.Error()
-				}
-
-				duration := time.Since(startTime)
-				reponseText = reponseText + fmt.Sprintf( "Took %s to execute" , duration.String())
-				newMsg = tgbotapi.NewMessage(msg.Chat.ID, reponseText)
-				newMsg.ReplyToMessageID = msg.MessageID
-				err = bot.Send(newMsg)
-			}
-		}
-	}
+	disp := dispatcher.NewDispatcher(log,auth)
+	cmd := contracts.TGCommand{}
+	cmd.Msg = &msg
+	err = disp.Dispatch(bot,cmd )
 	return err
 }
 
-func procMessage(log logs.Logger,bot telegram.TelegramBot, msg tgbotapi.Message)(err error){
+
+func procMessage(log logs.Logger,bot telegram.TelegramBot, msg tgbotapi.Message,auth contracts.Auth)(err error){
 	log.Log(fmt.Sprintf( "User \"%s\" sent us message \"%s\"", log.CS.Green(telegram.GetMsgContactTitle(msg)), log.CS.Green(msg.Text)))
-	if msg.IsCommand() {
-		err = procCommand(log,bot,msg)
-	} else {
-		newMsg := tgbotapi.NewMessage(msg.Chat.ID, "Got your message. Thanks for your time. Send some commands to work with")
-		newMsg.ReplyToMessageID = msg.MessageID
-		err = bot.Send(newMsg)
-	}
+	err = procCommandv2(log,bot,msg,auth)
 
 	return err
 }
 
-func runCheckMsg(log logs.Logger,settingsHandler contracts.Settings)(err error){
+func runCheckMsg(log logs.Logger,auth contracts.Auth,settingsHandler contracts.Settings)(err error){
 	telegramBot := telegram.NewTelegramBot(log,settingsHandler)
 	err = telegramBot.Connect()
 	if err == nil{
@@ -114,7 +77,7 @@ func runCheckMsg(log logs.Logger,settingsHandler contracts.Settings)(err error){
 		log.Log(fmt.Sprintf("Got %d messages", len(messages)))
 		for i, msg := range(messages){
 			log.Log(fmt.Sprintf("Processing message %d", i + 1))
-			err = procMessage(log,*telegramBot,msg)
+			err = procMessage(log,*telegramBot,msg,auth)
 			if err != nil {
 				log.Error(err)
 			}

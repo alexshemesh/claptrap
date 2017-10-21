@@ -11,6 +11,12 @@ import (
 	"encoding/json"
 	"github.com/alexshemesh/claptrap/lib/logs"
 	"github.com/spf13/viper"
+
+	garbler "github.com/michaelbironneau/garbler/lib"
+
+	"github.com/alexshemesh/claptrap/lib/contracts"
+
+	"strings"
 )
 
 type DataToSet struct {
@@ -18,16 +24,22 @@ type DataToSet struct {
 }
 
 type VaultClient struct {
-	ServerURL string
-	token string
-	log logs.Logger
+	ServerURL  string
+	Token      string
+	UserDomain string
+	log        logs.Logger
+}
+
+func calcPolicyName(userName string)(retVal string){
+	retVal = userName + "_policy"
+	return retVal
 }
 
 func NewVaultClientInitialized( logPar logs.Logger) (retVal *VaultClient){
 	vaultAddr := viper.Get("vault.url").(string)
-	vaultToken := viper.Get("vault.token").(string)
+	vaultToken := viper.Get("vault.Token").(string)
 
-	retVal = &VaultClient{ServerURL: vaultAddr, log: *logPar.SubLogger("vault"), token: vaultToken}
+	retVal = &VaultClient{ServerURL: vaultAddr, log: *logPar.SubLogger("vault"), Token: vaultToken}
 	return retVal
 }
 
@@ -126,12 +138,12 @@ func (this VaultClient)Unseal(keys []string) ( err error){
 	return err
 }
 
-func  (this *VaultClient)Auth(tokenPar string){
-	this.token = tokenPar
+func  (this *VaultClient) SetToken(tokenPar string){
+	this.Token = tokenPar
 }
 
 func (this VaultClient)Seal() ( err error){
-	if this.token == "" {
+	if this.Token == "" {
 		err = fmt.Errorf("Not authorized")
 	} else {
 
@@ -141,7 +153,7 @@ func (this VaultClient)Seal() ( err error){
 		u, err = url.Parse(this.ServerURL)
 		u.Path = path.Join(u.Path, "v1", "sys", "seal")
 
-		_, err = http.Put().Execute( u.String(), map[string]string{ "X-Vault-Token":" " + this.token }, nil )
+		_, err = http.Put().Execute( u.String(), map[string]string{ "X-Vault-Token":" " + this.Token}, nil )
 
 		if err == nil {
 			this.log.Log("Vault sealed successfully")
@@ -154,7 +166,7 @@ func (this VaultClient) SetValue(secretPath string, secretValue string) ( err er
 
 	dataToSet := DataToSet{secretValue}
 	this.log.Debug("Set secret " + secretPath)
-	if this.token == "" {
+	if this.Token == "" {
 		err = fmt.Errorf("Not authorized")
 	} else {
 		http := httpClient.NewHttpExecutor()
@@ -164,23 +176,28 @@ func (this VaultClient) SetValue(secretPath string, secretValue string) ( err er
 		u.Path = path.Join(u.Path, "v1", "secret",secretPath)
 		var body []byte
 		body,err = json.Marshal(dataToSet)
-		_, err = http.Put().Execute( u.String(), map[string]string{ "X-Vault-Token":" " + this.token }, body )
+		_, err = http.Put().Execute( u.String(), map[string]string{ "X-Vault-Token":" " + this.Token}, body )
 	}
 	return err
 }
 
 func (this VaultClient) GetValue(secretPath string) (retVal string, err error){
-	if this.token == "" {
+	if this.Token == "" {
 		err = fmt.Errorf("Not authorized")
 	} else {
 		http := httpClient.NewHttpExecutor()
 
 		var u *url.URL
 		u, err = url.Parse(this.ServerURL)
-		u.Path = path.Join(u.Path, "v1", "secret",secretPath)
+		if this.UserDomain != "" {
+			u.Path = path.Join(u.Path, "v1", "secret",this.UserDomain,secretPath)
+		}else{
+			u.Path = path.Join(u.Path, "v1", "secret",secretPath)
+		}
+
 		var response []byte
 
-		response, err = http.Get().Execute( u.String(), map[string]string{ "X-Vault-Token":" " + this.token },nil )
+		response, err = http.Get().Execute( u.String(), map[string]string{ "X-Vault-Token":" " + this.Token},nil )
 
 		if err == nil {
 			var parsedJson *gabs.Container
@@ -193,3 +210,212 @@ func (this VaultClient) GetValue(secretPath string) (retVal string, err error){
 }
 
 
+func (this VaultClient)CreateUser( userName string ) (initialPassword string, err error){
+	if this.Token == "" {
+		err = fmt.Errorf("Not authorized")
+	} else {
+		http := httpClient.NewHttpExecutor()
+
+		var u *url.URL
+		u, err = url.Parse(this.ServerURL)
+		initialPassword, _ = garbler.NewPassword(nil)
+
+
+	  body :=fmt.Sprintf(`{"password":"%s", "policies":"%s"}`, initialPassword ,calcPolicyName(userName) )
+	//	body :=fmt.Sprintf(`{"password":"%s", "policies":"admin,default"}`, initialPassword )
+
+
+		u.Path = path.Join(u.Path, "v1", "auth","userpass","users",userName)
+
+		_, err = http.Post().Execute( u.String(), map[string]string{ "X-Vault-Token":" " + this.Token},[]byte(body) )
+
+	}
+	return initialPassword, err
+}
+
+
+func (this VaultClient)CreateDefaultPolicyForUser( userName string ) (  err error){
+
+
+	if this.Token == "" {
+		err = fmt.Errorf("Not authorized")
+	} else {
+		http := httpClient.NewHttpExecutor()
+
+		var u *url.URL
+		u, err = url.Parse(this.ServerURL)
+		body := fmt.Sprintf(`{"rules":"{\"path\":{\"auth\/approle\/role\/\":{\"policy\":\"write\"},\"secret\/%s\/*\":{\"policy\":\"read\"}}}"}`,userName)
+		/*body := `{
+								"rules":"{
+										\"path\": {
+												\"auth\/approle\/role\/\":{
+														\"policy\":\"write\"
+												},
+												\"secret\/\":{
+														\"policy\":\"write\"}
+												}
+										}"
+							}`
+*/
+		//	body := `{"rules":"path \"postgresql/creds/readonly\" {\n  capabilities = [\"read\"]\n}"}`
+	/*	policyTemplate := `{"rules":{
+			path "secret/*" {
+				capabilities = ["deny"]
+			}
+
+			path "sys/*" {
+				capabilities = ["deny"]
+			}
+
+			path "secret/users/%s/*" {
+				capabilities = ["create", "read", "update", "delete", "list"]
+			}
+
+			path "secret/settings/*" {
+				capabilities = [ "read" ]
+			}
+
+			path "auth/Token/lookup-self" {
+				capabilities = [ "read" ]
+			}
+		}`
+
+		body := fmt.Sprintf(policyTemplate,userName )
+*/
+		u.Path = path.Join(u.Path, "v1", "sys","policy", calcPolicyName(userName) )
+		//http = http.SetContentType("text/plain")
+
+		_, err = http.Put().Execute( u.String(), map[string]string{ "X-Vault-Token":" " + this.Token},[]byte(body) )
+
+	}
+	return err
+}
+
+
+func (this VaultClient)LogInCached(userName string)(retObjSettings contracts.Settings,retObjAuth contracts.Auth ,err error){
+	var token,tokenName string
+	token,err = this.GetValue("tokens/" + userName)
+	tokenName,err = this.LookupToken(token)
+	retVal := NewVaultClientInitialized(this.log)
+	if err == nil {
+		this.log.Debug("Looked up token is OK" + tokenName)
+
+		retVal.Token = token
+		retVal.UserDomain = userName
+	}else{
+		this.log.Error(err)
+	}
+	return retVal ,retVal  ,err
+}
+
+func (this VaultClient)RenewToken()(err error){
+	return err
+}
+
+func (this VaultClient)LogIn( userName string, password string ) ( retObjSettings contracts.Settings,retObjAuth contracts.Auth ,err error){
+	retVal := this
+	http := httpClient.NewHttpExecutor()
+
+	body := fmt.Sprintf(`{"password": "%s"}`, password)
+
+	var u *url.URL
+	u, err = url.Parse(this.ServerURL)
+
+	u.Path = path.Join(u.Path, "v1", "auth", "userpass","login",userName )
+
+	var resp []byte
+	resp, err = http.Post().Execute( u.String(), nil,[]byte(body) )
+	if err == nil {
+		if  resp != nil {
+			this.log.Debug(string(resp))
+			var respData *gabs.Container
+
+			respData,err = gabs.ParseJSON(resp)
+			if err == nil {
+				//setting up new Token
+				retVal.Token = strings.Trim(respData.Path("auth.client_token").String(),"\"")
+				retVal.UserDomain = userName
+			}
+		}
+	}
+	if err != nil{
+		this.log.Error(err)
+	}
+
+	return retVal,retVal,err
+}
+
+func (this VaultClient) SaveCachedToken(userName string , token string) (err error){
+	err = this.SetValue("tokens/" + userName, token)
+	return err
+}
+
+func (this VaultClient) LookupToken(token string) (retVal string, err error){
+	if this.Token == "" {
+		err = fmt.Errorf("Not authorized")
+	} else {
+		http := httpClient.NewHttpExecutor()
+
+		var u *url.URL
+		u, err = url.Parse(this.ServerURL)
+		u.Path = path.Join(u.Path, "v1", "auth","token","lookup")
+		body := fmt.Sprintf(`{"token": "%s"}`, token)
+		var response []byte
+		response, err = http.Get().Execute( u.String(), map[string]string{ "X-Vault-Token":" " + this.Token},[]byte(body) )
+		this.log.Debug(string(response))
+		if err == nil {
+			var jsonParsed *gabs.Container
+			jsonParsed, err = gabs.ParseJSON(response)
+			if err == nil {
+				retVal = jsonParsed.Path("data.display_name").Data().(string)
+			}
+		}
+	}
+	return retVal, err
+}
+
+
+
+func (this VaultClient)DeleteUserPolicy(userName string)(err error){
+	if this.Token == "" {
+		err = fmt.Errorf("Not authorized")
+	} else {
+		http := httpClient.NewHttpExecutor()
+
+		var u *url.URL
+		u, err = url.Parse(this.ServerURL)
+
+		u.Path = path.Join(u.Path, "v1", "sys","policy", calcPolicyName(userName) )
+
+		_, err = http.Delete().Execute( u.String(), map[string]string{ "X-Vault-Token":" " + this.Token},nil )
+
+	}
+	return err
+}
+
+func (this VaultClient)DeleteUser( userName string )  (err error){
+	if this.Token == "" {
+		err = fmt.Errorf("Not authorized")
+	} else {
+		http := httpClient.NewHttpExecutor()
+
+		var u *url.URL
+		u, err = url.Parse(this.ServerURL)
+
+		u.Path = path.Join(u.Path,"v1", "auth","userpass","users",userName)
+
+		_, err = http.Delete().Execute( u.String(), map[string]string{ "X-Vault-Token":" " + this.Token},nil )
+
+		err = this.DeleteUserPolicy(userName)
+
+	}
+	return err
+}
+
+func (this VaultClient)GetUserName()( string){
+	return this.UserDomain
+}
+
+func (this VaultClient)GetUserToken()( string){
+	return this.Token
+}

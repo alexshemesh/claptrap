@@ -56,7 +56,7 @@ func init() {
 
 func runSetKey(log logs.Logger, vaultAddr string, vaultToken string,secretPath string, secretValue string)(err error){
 	vault := vault.NewVaultClient(vaultAddr,log)
-	vault.Auth(vaultToken)
+	vault.SetToken(vaultToken)
 	err = vault.SetValue(secretPath,secretValue)
 	if err == nil {
 		log.Log(fmt.Sprintf( "Success.Secret at path %s set. Value %s",secretPath, secretValue ))

@@ -7,8 +7,6 @@ from fabric.api import run,put,env,cd,local,lcd,sudo,settings, hide
 from fabric.contrib.files import exists
 from fabric.state import connections
 
-#env.hosts = ['ubuntu@staging-agent-1.wixcore3.com']
-#env.key_filename=['~/.ssh/core3-ci.pem']
 
 env.hosts = ['vagrant@' + os.environ['TARGET_SERVER']]
 env.user = 'vagrant'

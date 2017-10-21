@@ -1,8 +1,15 @@
-hash: 34d8654955e2779d58a83ba576e774de37ce770d197f54d6f0d5c38c87397368
-updated: 2017-07-28T17:27:50.94803064+03:00
+hash: 8a1e18a8eb2d182238f1ac7f526f791c320446eee362704c2bff270f07420843
+updated: 2017-08-30T00:06:10.01569901+03:00
 imports:
+- name: github.com/bitfinexcom/bitfinex-api-go
+  version: 1c6485777d8bfa52fb4e812b992dc1654507bc49
+  subpackages:
+  - utils
+  - v1
 - name: github.com/fsnotify/fsnotify
   version: 4da3e2cfbabc9f751898f250b49f2439785783a1
+- name: github.com/gorilla/websocket
+  version: a69d9f6de432e2c6b296a947d8a5ee88f68522cf
 - name: github.com/hashicorp/hcl
   version: 7fa7fff964d035e8a162cce3a164b3ad02ad651b
   subpackages:
@@ -19,9 +26,13 @@ imports:
 - name: github.com/Jeffail/gabs
   version: 2a3aa15961d5fee6047b8151b67ac2f08ba2c48c
 - name: github.com/logrusorgru/aurora
-  version: 962a6974312dde57d1f6f5738b4f83e1af9f38a4
+  version: b9c3722b64a1976e0624448ee7f5a0744b8cf629
 - name: github.com/magiconair/properties
   version: 51463bfca2576e06c62a8504b5c0f06d61312647
+- name: github.com/michaelbironneau/garbler
+  version: eaea49f3709333a999768eddd70d24eba599e78d
+  subpackages:
+  - lib
 - name: github.com/mitchellh/mapstructure
   version: cc8532a8e9a55ea36402aa21efdf403a60d34096
 - name: github.com/pelletier/go-buffruneio
@@ -31,7 +42,7 @@ imports:
 - name: github.com/rs/xid
   version: 02dd45c33376f85d1064355dc790dcc4850596b1
 - name: github.com/Sirupsen/logrus
-  version: a3f95b5c423586578a4e099b11a46c2479628cac
+  version: f006c2ac4710855cf0f916dd6b77acf6b048dc6e
 - name: github.com/spf13/afero
   version: 9be650865eab0c12963d8753212f4f9c66cdcf12
   subpackages:
@@ -48,6 +59,10 @@ imports:
   version: 0967fc9aceab2ce9da34061253ac10fb99bba5b2
 - name: github.com/technoweenie/multipartstreamer
   version: a90a01d73ae432e2611d178c18367fbaa13e0154
+- name: golang.org/x/crypto
+  version: 5a033cc77e57eca05bdb50522851d29e03569cbe
+  subpackages:
+  - ssh/terminal
 - name: golang.org/x/sys
   version: 9ccfe848b9db8435a24c424abbc07a921adf1df5
   subpackages:

@@ -8,6 +8,7 @@ import (
 	"math/rand"
 	"github.com/alexshemesh/claptrap/lib/logs"
 	"errors"
+
 )
 
 type HttpClient struct {
@@ -30,6 +31,7 @@ func calcRequestID() int {
 
 func (this HttpClient) generateCopyWithOperation(requestType string) (HttpExecutor) {
 	newVal := this
+	newVal.contentType = this.contentType
 	newVal.requestType = requestType
 	newVal.reguestID = calcRequestID()
 	newVal.log = *this.log.SubLogger(fmt.Sprintf("%s %d", newVal.requestType, newVal.reguestID))
@@ -61,21 +63,27 @@ func (this HttpClient) Execute(url string, headers map[string]string, body []byt
 		headers = make(map[string]string)
 	}
 
-	this.log.Debug(fmt.Sprintf("Executing request URL: %s, headers: %s, body: %s", url, headers, body))
 
-	req, err := http.NewRequest(this.requestType, url, bytes.NewBuffer([]byte(body)))
+
+	req, err := http.NewRequest(this.requestType, url, bytes.NewBuffer(body))
 	if err == nil {
 		for k, v := range headers {
 			req.Header.Set(k, v)
 		}
 		this.log.Debug("Set content type to be " + this.contentType)
 		req.Header.Set("Content-Type", this.contentType)
+		this.log.Debug(fmt.Sprintf("Executing request URL: %s, headers: %s, body: %s", url, headers, body))
 		var resp *http.Response
 		resp, err = client.Do(req)
-		if resp.StatusCode >= 400 {
-			err = errors.New( resp.Status )
+		if err == nil {
+			if resp != nil {
+				this.log.Log(fmt.Sprintf("%d %s", resp.StatusCode, resp.Status))
+
+				if resp.StatusCode >= 400 {
+						err = errors.New(resp.Status)
+				}
+			}
 		}
-		this.log.Log(fmt.Sprintf("%d %s",resp.StatusCode,resp.Status ))
 
 		defer func() {
 			if resp != nil {
@@ -92,4 +100,12 @@ func (this HttpClient) Execute(url string, headers map[string]string, body []byt
 		}
 	}
 	return response, err
+}
+
+func (this HttpClient)SetContentType(newContentType string)( HttpClient){
+	newVal := this
+	newVal.contentType = newContentType
+	newVal.reguestID = calcRequestID()
+	newVal.log = *this.log.SubLogger(fmt.Sprintf("%s %d", newVal.requestType, newVal.reguestID))
+	return newVal
 }
