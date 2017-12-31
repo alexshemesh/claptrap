@@ -6,8 +6,8 @@ import (
 	"gopkg.in/telegram-bot-api.v4"
 	"time"
 	"fmt"
-	"github.com/alexshemesh/claptrap/lib/kuna"
-	"github.com/alexshemesh/claptrap/lib/bitfinex"
+	"github.com/alexshemesh/claptrap/lib/markets/kuna"
+	"github.com/alexshemesh/claptrap/lib/markets/bitfinex"
 	"github.com/alexshemesh/claptrap/lib/contracts"
 
 	"strings"

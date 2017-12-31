@@ -20,3 +20,4 @@ import:
 - package: golang.org/x/crypto
   subpackages:
   - ssh/terminal
+- package: github.com/beldur/kraken-go-api-client

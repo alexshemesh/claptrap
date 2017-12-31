@@ -20,7 +20,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/alexshemesh/claptrap/lib/logs"
 	"os"
-	"github.com/alexshemesh/claptrap/lib/kuna"
+	"github.com/alexshemesh/claptrap/lib/markets/kuna"
 )
 
 // ordersbookCmd represents the ordersbook command

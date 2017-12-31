@@ -1,15 +1,17 @@
-hash: 8a1e18a8eb2d182238f1ac7f526f791c320446eee362704c2bff270f07420843
-updated: 2017-08-30T00:06:10.01569901+03:00
+hash: a1cef1ad2cec63bafb917155789bc1acbca256a914d6de64b33e4aea0c2e5b55
+updated: 2017-11-08T22:18:51.273034137+02:00
 imports:
+- name: github.com/beldur/kraken-go-api-client
+  version: 8d016ed55540af48a37d20c9954c71a7d12ad97b
 - name: github.com/bitfinexcom/bitfinex-api-go
-  version: 1c6485777d8bfa52fb4e812b992dc1654507bc49
+  version: 4f76741a5a962c0c06c3983cab989a5e4ce7f934
   subpackages:
   - utils
   - v1
 - name: github.com/fsnotify/fsnotify
   version: 4da3e2cfbabc9f751898f250b49f2439785783a1
 - name: github.com/gorilla/websocket
-  version: a69d9f6de432e2c6b296a947d8a5ee88f68522cf
+  version: 3da6ca0cb65383f2b607a677b6b55e8358cacee6
 - name: github.com/hashicorp/hcl
   version: 7fa7fff964d035e8a162cce3a164b3ad02ad651b
   subpackages:

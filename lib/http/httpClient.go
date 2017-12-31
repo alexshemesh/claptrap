@@ -8,6 +8,7 @@ import (
 	"math/rand"
 	"github.com/alexshemesh/claptrap/lib/logs"
 	"errors"
+	"io"
 
 )
 
@@ -54,7 +55,7 @@ func (this HttpClient) Delete() (retVal HttpExecutor) {
 	return this.generateCopyWithOperation("DELETE")
 }
 
-func (this HttpClient) Execute(url string, headers map[string]string, body []byte) (response []byte, err error) {
+func (this HttpClient)ExecuteWithReader(url string, headers map[string]string, body io.Reader) (response []byte, err error){
 	requestID := calcRequestID()
 
 	client := &http.Client{}
@@ -64,8 +65,7 @@ func (this HttpClient) Execute(url string, headers map[string]string, body []byt
 	}
 
 
-
-	req, err := http.NewRequest(this.requestType, url, bytes.NewBuffer(body))
+	req, err := http.NewRequest(this.requestType, url, body)
 	if err == nil {
 		for k, v := range headers {
 			req.Header.Set(k, v)
@@ -80,7 +80,7 @@ func (this HttpClient) Execute(url string, headers map[string]string, body []byt
 				this.log.Log(fmt.Sprintf("%d %s", resp.StatusCode, resp.Status))
 
 				if resp.StatusCode >= 400 {
-						err = errors.New(resp.Status)
+					err = errors.New(resp.Status)
 				}
 			}
 		}
@@ -100,6 +100,10 @@ func (this HttpClient) Execute(url string, headers map[string]string, body []byt
 		}
 	}
 	return response, err
+}
+
+func (this HttpClient) Execute(url string, headers map[string]string, body []byte) (response []byte, err error) {
+	return this.ExecuteWithReader(url, headers, bytes.NewBuffer(body))
 }
 
 func (this HttpClient)SetContentType(newContentType string)( HttpClient){
