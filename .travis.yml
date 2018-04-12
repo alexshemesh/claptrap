@@ -21,22 +21,22 @@ after_success:
   echo $TRAVIS_GO_VERSION
   if [ "$TRAVIS_TAG" != "" ] && [ "$TRAVIS_GO_VERSION" == "1.8.3" ]
   then
-    CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w -X main.Version=$TRAVIS_TAG" -o claptrap-linux-amd64
-    CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w -X main.Version=$TRAVIS_TAG" -o claptrap-darwin-amd64
-    CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -ldflags="-s -w -X main.Version=$TRAVIS_TAG" -o claptrap-windows-amd64
+    CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w -X main.Version=$TRAVIS_TAG" -o build/claptrap-linux-amd64-$TRAVIS_TAG
+    CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w -X main.Version=$TRAVIS_TAG" -o build/claptrap-darwin-amd64-$TRAVIS_TAG
+    CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -ldflags="-s -w -X main.Version=$TRAVIS_TAG" -o build/claptrap-windows-amd64-$TRAVIS_TAGv
   fi
 script: go test --cover $(go list ./... | grep -v '/vendor/')
 
 deploy:
-  provider: releases
+  provider: s3
   skip_cleanup: true
-  api_key:
-    secure: SvXwnmtTcEJTKtjtbEQHi71+CblEGjNqFQLbUSqk+Y9fe49k9PmaMR6ROlI629FqGIoOIKIhHK5NKPC6lC18HlOV1cwgH6fBeZUk2VmuKSJwpJRUmEAk9FkMmdZVY0C3OxiDlt7vnISpw55iGX52VC83J3o5XNjlwbbd1Wmi9rEk4ot9WhoZCoTZxxxiNUji/QQt20905ZNmxpAfe++gIE9UIV4vP3uArDQ2Bk9pqclXAFBpb8+8eFxoYHkl/fNoUglAmINj3osMxNAn9UQ5luDGu4++XxXZJPwEg1q4cJQcJNZZdjNYni2VvDO+gJLgEY2opV4auU+4RKqR5iwIVk0ICOcnOvGH/KK8KEpP/wDgWxr1xAlZTUW5jZxLTmCCax4S14rPOFJVr+F6x6RYwa3+98JBi/WM708zqf2PDBaphl7Z4c4iIH39nogRk2Gj/OqyqZLmkDcfXloC5/Bl4tPGEeT2IuxsaICWEcusngTlZNDWYs7BxOIKkqMo/ZWsAahMSPTejVjZMjP61/JQVwMdHtSfzeBB80jLxZJFBnABhAzr3v8iSlSdRtlW27qk+eWYhmGI77JmHw0DXQ1C/a9l5VGn/XDCbct6uEl3lrYokBqe15DfNkPsqMVJlUGJGQOUSoUS9pNxzN6y0ZwT3UT0GOGCLatJMll48ARiwTw=
-    file:
-      - claptrap-linux-amd64
-      - claptrap-darwin-amd64
-      - claptrap-windows-amd64
+  access_key_id: AKIAIFXY43SCFTSOEXJA
+  secret_access_key:
+    secure: XIewh5mTsxigAunoVP8tcBI9tjHBAg16M+f26pG195kc3B9d6YwK/acB5GUtWlwFFR2U/lC0YisQNTOEbcvBKkeo46wysW8uY/hOcrTQUqIZTBVPvY/Ac3oCu8DJuTmAK5+8c7lJhayEul50FXsUQBfV9Yxwf6fn+l2WohC19l8KZOua7xEuBRiI6uYyhZ+InaOPebHXJCpawFA9KrQfepwA0EH5DTZIYMXc9n9juLdpe7N4khpiICcv7eXQ1qHf/vPvU3G7b3TXvHaO7jVmPXBSn6n0cleGDvab/gI/4xBIR6kB2j9DrrcgiSqulQ4dp+MVYBzKtpZ/0iw7MscRTYKaDReLZUXlpw6FHrU+Oq9apMLYRmwJ3/+2L+7MKvLLkjiuo1UWKNZayyxOlYI51x2nVWFICycRlupQ2VchONCmrU/th3FhMXDZfVW2c6Q4YRI3S+rA2+ghtcxym1kxR1/QcIgQ3mnlkt/KZ8M6DhrJM/TfUaCjoixSKnV9xtJDYIQ0dmaefODBforbm0gak/hyEHes2Ydmal/XcYyY1X+iwAAtNFKjy/LEoGmhG7W+oQOH0XE/u6ZQm6qU9+CmsHK0l4JIFxqVP9G97lggtDh7R/06dXUP/ZImRUI1iQknP9Cp5NpHMOmST8Co4WdRH96DnNIhK34CZLdcp5VDKE8=
+  bucket: files.cct-ops.com
+  acl: authenticated_read
   on:
     repo: alexshemesh/claptrap
-    condition: $TRAVIS_GO_VERSION = 1.8.3
+    condition: $TRAVIS_GO_VERSION = 1.8.7
     tags: true
+  local_dir: build
