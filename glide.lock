@@ -1,17 +1,17 @@
 hash: a1cef1ad2cec63bafb917155789bc1acbca256a914d6de64b33e4aea0c2e5b55
-updated: 2017-11-08T22:18:51.273034137+02:00
+updated: 2018-04-12T17:28:44.341143+03:00
 imports:
 - name: github.com/beldur/kraken-go-api-client
-  version: 8d016ed55540af48a37d20c9954c71a7d12ad97b
+  version: 8d8ccfe4cc60d1703ffe596c889b887a318a884c
 - name: github.com/bitfinexcom/bitfinex-api-go
-  version: 4f76741a5a962c0c06c3983cab989a5e4ce7f934
+  version: 0021a6a0b3e9bdaddd57a7146c9829367d9885ae
   subpackages:
   - utils
   - v1
 - name: github.com/fsnotify/fsnotify
   version: 4da3e2cfbabc9f751898f250b49f2439785783a1
 - name: github.com/gorilla/websocket
-  version: 3da6ca0cb65383f2b607a677b6b55e8358cacee6
+  version: 4201258b820c74ac8e6922fc9e6b52f71fe46f8d
 - name: github.com/hashicorp/hcl
   version: 7fa7fff964d035e8a162cce3a164b3ad02ad651b
   subpackages:
@@ -44,7 +44,7 @@ imports:
 - name: github.com/rs/xid
   version: 02dd45c33376f85d1064355dc790dcc4850596b1
 - name: github.com/Sirupsen/logrus
-  version: f006c2ac4710855cf0f916dd6b77acf6b048dc6e
+  version: c155da19408a8799da419ed3eeb0cb5db0ad5dbc
 - name: github.com/spf13/afero
   version: 9be650865eab0c12963d8753212f4f9c66cdcf12
   subpackages:
@@ -52,30 +52,31 @@ imports:
 - name: github.com/spf13/cast
   version: acbeb36b902d72a7a4c18e8f3241075e7ab763e4
 - name: github.com/spf13/cobra
-  version: 7b1b6e8dc027253d45fc029bc269d1c019f83a34
+  version: 7b2c5ac9fc04fc5efafb60700713d4fa609b777b
 - name: github.com/spf13/jwalterweatherman
   version: fa7ca7e836cf3a8bb4ebf799f472c12d7e903d66
 - name: github.com/spf13/pflag
-  version: f1d95a35e132e8a1868023a08932b14f0b8b8fcb
+  version: e57e3eeb33f795204c1ca35f56c44f83227c6e66
 - name: github.com/spf13/viper
-  version: 0967fc9aceab2ce9da34061253ac10fb99bba5b2
+  version: 25b30aa063fc18e48662b86996252eabdcf2f0c7
 - name: github.com/technoweenie/multipartstreamer
   version: a90a01d73ae432e2611d178c18367fbaa13e0154
 - name: golang.org/x/crypto
-  version: 5a033cc77e57eca05bdb50522851d29e03569cbe
+  version: 9419663f5a44be8b34ca85f08abc5fe1be11f8a3
   subpackages:
   - ssh/terminal
 - name: golang.org/x/sys
-  version: 9ccfe848b9db8435a24c424abbc07a921adf1df5
+  version: ebfc5b4631820b793c9010c87fd8fef0f39eb082
   subpackages:
   - unix
+  - windows
 - name: golang.org/x/text
-  version: 470f45bf29f4147d6fbd7dfd0a02a848e49f5bf4
+  version: b19bf474d317b857955b12035d2c5acb57ce8b01
   subpackages:
   - transform
   - unicode/norm
 - name: gopkg.in/telegram-bot-api.v4
-  version: 0a57807db79efce7f6719fbb2c0e0f83fda79aec
+  version: 0e0af0c480ea98e982d5f4d45fb39577c6ab1e3e
 - name: gopkg.in/yaml.v2
   version: cd8b52f8269e0feb286dfeef29f8fe4d5b397e0b
 testImports:

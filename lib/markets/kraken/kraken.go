@@ -3,11 +3,7 @@ package kraken
 import (
 	"github.com/alexshemesh/claptrap/lib/logs"
 	"github.com/alexshemesh/claptrap/lib/contracts"
-	"crypto/sha256"
-	"crypto/hmac"
-	"crypto/sha512"
-	"net/url"
-  "encoding/base64"
+
 	krakenApi "github.com/beldur/kraken-go-api-client"
 )
 
@@ -25,7 +21,7 @@ type KrakenClient struct{
 }
 
 func NewKrakenClient(logPar logs.Logger, settingPar contracts.Settings )(retVal *KrakenClient){
-	retVal = &KrakenClient{ settings: settingPar,  log: *logPar.SubLogger("kraken") }
+	retVal = &KrakenClient{  log: *logPar.SubLogger("kraken") }
 	retVal.apikey,_  = settingPar.GetValue("kraken/key")
 	retVal.secret,_  = settingPar.GetValue("kraken/secret")
 	return retVal

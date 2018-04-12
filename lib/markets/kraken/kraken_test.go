@@ -8,10 +8,11 @@ import (
 
 
 func Test_NewKrakenClient(t *testing.T){
-	settings := vault.NewVaultTestKit()
+	settings := *vault.NewVaultTestKit()
+
 	log := *logs.NewLogger("kraken test")
-	serverUrl := "server.url"
-	val :=  NewKrakenClient( log, serverUrl, settings )
+
+	val :=  NewKrakenClient( log, settings )
 	if ( val == nil){
 		t.Error("Cannot create NewKrakenClient")
 	}

@@ -70,7 +70,7 @@ func runInit( log logs.Logger , vaultAddr string) ( err error ){
 		if err == nil {
 			vault.Unseal(keys)
 
-			log.Log(fmt.Sprintf("Vault at % initialized and unsealed", vaultAddr))
+			log.Log(fmt.Sprintf("Vault at %s initialized and unsealed", vaultAddr))
 			log.Log("Save these keys in safe location. You will not be able to retrieve them from server againg!!!")
 			for i, key := range (keys) {
 				log.Log(fmt.Sprintf("\tKey %d: %s", i, key))
