@@ -14,6 +14,7 @@ import (
 	"strings"
 
 	"net/http"
+	"io/ioutil"
 )
 
 type QuoineApi struct{
@@ -46,9 +47,6 @@ func createSignature(urlPath string, values url.Values, secret []byte) string {
 	return base64.StdEncoding.EncodeToString(macSum)
 }
 
-
-
-
 func NewQuoineClient(logsPar logs.Logger, apiKeyPar string, apiSecretPar string) (retVal *QuoineApi){
 	retVal = &QuoineApi{
 		log: logsPar,
@@ -59,7 +57,7 @@ func NewQuoineClient(logsPar logs.Logger, apiKeyPar string, apiSecretPar string)
 	return retVal
 }
 
-func (this QuoineApi) doRequest(reqURL string, values url.Values, headers map[string]string) ([]byte, error) {
+func (this QuoineApi) doRequest(reqURL string, values url.Values, headers map[string]string) (retVal []byte, err error) {
 
 	// Create request
 	req, err := http.NewRequest("POST", reqURL, strings.NewReader(values.Encode()))
@@ -73,7 +71,8 @@ func (this QuoineApi) doRequest(reqURL string, values url.Values, headers map[st
 	}
 
 	// Execute request
-	resp, err := this.client.Do(req)
+	var resp http.Response
+//	resp, err := this.client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("Could not execute request! #2 (%s)", err.Error())
 	}
@@ -81,11 +80,15 @@ func (this QuoineApi) doRequest(reqURL string, values url.Values, headers map[st
 
 	// Read request
 	body, err := ioutil.ReadAll(resp.Body)
+	if body == nil {
+
+	}
+	return retVal,err
 }
 
 func (this QuoineApi)performGetRequest(urlPath string, values url.Values){
 
-	reqURL := fmt.Sprintf("%s%s", APIURL, urlPath)
+	reqURL := fmt.Sprintf("%s%s", this.ApiUrl, urlPath)
 	secret, _ := base64.StdEncoding.DecodeString(this.secret)
 	values.Set("nonce", fmt.Sprintf("%d", time.Now().UnixNano()))
 
@@ -101,6 +104,12 @@ func (this QuoineApi)performGetRequest(urlPath string, values url.Values){
 
 
 	resp, err := this.doRequest(reqURL, values, headers)
+	if resp == nil {
+		this.log.Error(fmt.Errorf("Cannot perfrom request"))
+	}
+	if err != nil {
+		this.log.Error(err)
+	}
 }
 
 func (this QuoineApi)parseBalance()(retVal contracts.Balance, err error){
@@ -125,5 +134,7 @@ func (this QuoineApi)GetBalance(){
 
 	httpExecutor := httphelper.NewHttpExecutor()
 	resp, err := httpExecutor.Get().ExecuteWithReader(reqURL, headers, strings.NewReader(values.Encode()))
+	if err != nil || resp != nil {
 
+	}
 }
