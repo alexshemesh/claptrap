@@ -31,7 +31,7 @@ deploy:
   access_key_id: AKIAJ5V4JN6IDPX5TLTA
   secret_access_key:
     secure: do6QtzM9DmT3NBxJC5gJj2l8QnMQ7mxqQrLA2Dd0vJLRcr+f/rDevf9FmzhBD/xMUcC9v811+ckGmsO36k0aT3OOCgcI40z6HlzZGoRSiLuNVjT/KTorhzPKbM2WIn5bxR/0uM6y7sg/kvV9UQOvc55vkK7qFZSwTxgkN3NpMLKUl1l6Hyc5iqyZy7XGfaSv8SrtVAYRt5UazNRK5hCx3Up4+ctsRF/m7GwKGuVqH/Zmxc1ml2uW+2EZutdzXFXXmWxufpqjrLi/syOY//WtnKDVIZRTe4AQLKw0IlmxucCENtQiR4BzQYahMlkpkxjFPfJ2ArH8YZCZQTJJdVJP/Y8yXSLEKw29ojWsV0VsPO31vJW4mOl5oSqgN+5FPzkppwy1QM9jZgAZpS526Lu9OZLz7LjJ4dVzGcrTUj11ATNa3wcIqNp7tUBNrrz8IrV939cCF1P2P0HJlGc8iqRwVFOamIkW3vU5V9TwCy4D4STTXyitV/vQdhlwTfgdvsIfFWV0F4PI7RwY2PNxpx5u3ad4Ois9r8Kn3Ovk3IwcDOjqirmmaCIob72/+hdtLHh+ETH+oBUOD4Ibyv3ygNxvEGRkvCVOs4C2PiO7tk7w4R92zUBM6HcdfTXrPQCoXOI0mxt3nApU3jgGjq/J7gb4K4HdlQPNUcfiU4ZqYsZQQfA=
-  bucket: files.ctt-ops.com
+  bucket: files.cct-ops.com
   local-dir: build
   acl: private
   region: eu-west-1
