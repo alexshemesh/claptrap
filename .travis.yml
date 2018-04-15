@@ -2,7 +2,6 @@ sudo: required
 language: go
 go:
 - 1.10.1
-
 before_install:
 - GLIDE_OS_ARCH=`go env GOHOSTOS`-`go env GOHOSTARCH`
 - GLIDE_TAG=$(curl -s https://glide.sh/version)
@@ -21,22 +20,22 @@ after_success:
   echo $TRAVIS_GO_VERSION
   if [ "$TRAVIS_TAG" != "" ] && [ "$TRAVIS_GO_VERSION" == "1.8.3" ]
   then
-    CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w -X main.Version=$TRAVIS_TAG" -o claptrap-linux-amd64
-    CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w -X main.Version=$TRAVIS_TAG" -o claptrap-darwin-amd64
-    CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -ldflags="-s -w -X main.Version=$TRAVIS_TAG" -o claptrap-windows-amd64
+    mkdir build
+    CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w -X main.Version=$TRAVIS_TAG" -o build/claptrap-linux-amd64
+    CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w -X main.Version=$TRAVIS_TAG" -o build/claptrap-darwin-amd64
+    CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -ldflags="-s -w -X main.Version=$TRAVIS_TAG" -o build/claptrap-windows-amd64
   fi
 script: go test --cover $(go list ./... | grep -v '/vendor/')
-
 deploy:
-  provider: releases
+  provider: s3
   skip_cleanup: true
-  api_key:
-    secure: SvXwnmtTcEJTKtjtbEQHi71+CblEGjNqFQLbUSqk+Y9fe49k9PmaMR6ROlI629FqGIoOIKIhHK5NKPC6lC18HlOV1cwgH6fBeZUk2VmuKSJwpJRUmEAk9FkMmdZVY0C3OxiDlt7vnISpw55iGX52VC83J3o5XNjlwbbd1Wmi9rEk4ot9WhoZCoTZxxxiNUji/QQt20905ZNmxpAfe++gIE9UIV4vP3uArDQ2Bk9pqclXAFBpb8+8eFxoYHkl/fNoUglAmINj3osMxNAn9UQ5luDGu4++XxXZJPwEg1q4cJQcJNZZdjNYni2VvDO+gJLgEY2opV4auU+4RKqR5iwIVk0ICOcnOvGH/KK8KEpP/wDgWxr1xAlZTUW5jZxLTmCCax4S14rPOFJVr+F6x6RYwa3+98JBi/WM708zqf2PDBaphl7Z4c4iIH39nogRk2Gj/OqyqZLmkDcfXloC5/Bl4tPGEeT2IuxsaICWEcusngTlZNDWYs7BxOIKkqMo/ZWsAahMSPTejVjZMjP61/JQVwMdHtSfzeBB80jLxZJFBnABhAzr3v8iSlSdRtlW27qk+eWYhmGI77JmHw0DXQ1C/a9l5VGn/XDCbct6uEl3lrYokBqe15DfNkPsqMVJlUGJGQOUSoUS9pNxzN6y0ZwT3UT0GOGCLatJMll48ARiwTw=
-    file:
-      - claptrap-linux-amd64
-      - claptrap-darwin-amd64
-      - claptrap-windows-amd64
+  access_key_id: AKIAJ5V4JN6IDPX5TLTA
+  secret_access_key:
+    secure: lOHwfftwuENJijQo1XvM/O/zBmbzZJRdC2nE38eeEhm7cOMAYagMAizJ8mGxufKXPyJGIhpidiMnt6WC13Z94TaRRBYH6F9Nvuxe7j7h64fIftd3UcaxOz0W5eICT0cbXrUR0kei7yY+Cb34PCToxJ+TbisMlJvvWhvNabwCxYoAkLzECS44V40hnznsRue4ZiTOaJk6kgQvl4xLf43unv+QoufuXFkKfFKgBG5J2/1v4nL35y4sOb41RG6FKHtrmieHeca3iluS6ocFAq2gPz5i9tqo6aNhRLjGiwbockMS+6MYDDkldr5swrVOwm0L2BxE3ZivIjVVqnRE9E9HSOHbPAx2ID7GlBIurC7/P6dYuk1Z0zm36gjXV6Hhpl5FWbaEUEJyvYTdBCibDqT9p64h760dooYFiQ+OOSROiRMDq4DzNqTN/WT/jHwB2oefspD1/rsJhdtjjengiSrbxw82FgnYe7/QoLs7bpr/al2hwli6EiPaDbRsaNesTpfG6RCnfDMXdxe8pPzgy4+5mL06k8476JecAuGncGZmj4PId88gaQdkJtnIiT8Fa4iDCO8SSlmwJRz7Xn0Ph3zgk/KIXm149MYk/4cGzH9TYDE1CS5JYrpGZKwwqwmbZspbk93HmtJjwj3Zf+j0S5XeM2wTnUzHdo+IiMiZGoZAhSM=
+  bucket: files.ctt-ops.com
+  acl: authenticated_read
   on:
     repo: alexshemesh/claptrap
-    condition: $TRAVIS_GO_VERSION = 1.8.3
+    condition: "$TRAVIS_GO_VERSION = 1.10.1"
     tags: true
+  local_dir: build
