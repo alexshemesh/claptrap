@@ -18,7 +18,7 @@ after_success:
   echo "After Success:"
   echo $TRAVIS_TAG
   echo $TRAVIS_GO_VERSION
-  if [ "$TRAVIS_TAG" != "" ] && [ "$TRAVIS_GO_VERSION" == "1.10.1" ]
+  if [ "$TRAVIS_TAG" != "" ] && [ "$TRAVIS_GO_VERSION" == "1.8.3" ]
   then
     mkdir build
     CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w -X main.Version=$TRAVIS_TAG" -o build/claptrap-linux-amd64
@@ -31,7 +31,7 @@ deploy:
   skip_cleanup: true
   access_key_id: AKIAJ5V4JN6IDPX5TLTA
   secret_access_key:
-    secure: lOHwfftwuENJijQo1XvM/O/zBmbzZJRdC2nE38eeEhm7cOMAYagMAizJ8mGxufKXPyJGIhpidiMnt6WC13Z94TaRRBYH6F9Nvuxe7j7h64fIftd3UcaxOz0W5eICT0cbXrUR0kei7yY+Cb34PCToxJ+TbisMlJvvWhvNabwCxYoAkLzECS44V40hnznsRue4ZiTOaJk6kgQvl4xLf43unv+QoufuXFkKfFKgBG5J2/1v4nL35y4sOb41RG6FKHtrmieHeca3iluS6ocFAq2gPz5i9tqo6aNhRLjGiwbockMS+6MYDDkldr5swrVOwm0L2BxE3ZivIjVVqnRE9E9HSOHbPAx2ID7GlBIurC7/P6dYuk1Z0zm36gjXV6Hhpl5FWbaEUEJyvYTdBCibDqT9p64h760dooYFiQ+OOSROiRMDq4DzNqTN/WT/jHwB2oefspD1/rsJhdtjjengiSrbxw82FgnYe7/QoLs7bpr/al2hwli6EiPaDbRsaNesTpfG6RCnfDMXdxe8pPzgy4+5mL06k8476JecAuGncGZmj4PId88gaQdkJtnIiT8Fa4iDCO8SSlmwJRz7Xn0Ph3zgk/KIXm149MYk/4cGzH9TYDE1CS5JYrpGZKwwqwmbZspbk93HmtJjwj3Zf+j0S5XeM2wTnUzHdo+IiMiZGoZAhSM=
+    secure: W+oI1ASCMXR0DKtTLO8QFfoXMllyeGkzOpYJdUw/w8XVjvHf1o/VCm46Z5o4z+lQC/YdMKOYh5GbUzZ5CBdZW2jTTDCy6JiFMpx+lb1fGkaZRaP9zh7cTIcxedAkCQlj59SGCQkh36J6MkDYREFXAp6PjApvacVE4lB2ejdy3wyCd+YrIXm07SeD+KNPCD4sJaKlpLyGOQTMQDfVWEn4gXxECU3EutoeHNDxZyQOqfLGxlbNFkOUOUcZGXZTihlH/MK89gwIn699NOGSoBmdrjzVUvlm4HoWgE0RPndkQs4O2f9unoKNb+R4KbCrqMUJ4ZQ2iQaAeJ/88rjVObX8OLNQ5rmPCPj1vjG3ZaIRAJrBYkhyFHP2PNzRqi8WiV30aDBzmlZxbCVRgWDX5mHDtMjGnkz/ZaSxb+mV0VXI3Vc37YVPZbdFjJ2XyomJSywsaWyze58oVxv1WI/1th4vTf/X0MpmA++n1hKC4M2tvmOOk5NddjmAwaIhwYbavrmx6WDw2AvHK4jhror7LUmaaupIGqzUasaC2USa4YmPYb7bylHSwhtYc/yNIRASLU3bkUj4MUejmBXxOft8sVM0/BEzsyZPw5f4jaxwqoPyHZTg8f0ts8BDgKzmfbumiJ7bJXPJjRCHTiU1vMopm11cvI0dntzfNq6VNLe4mL01eWA=
   bucket: files.ctt-ops.com
   acl: authenticated_read
   on:
@@ -39,3 +39,6 @@ deploy:
     condition: "$TRAVIS_GO_VERSION = 1.10.1"
     tags: true
   local_dir: build
+env:
+  global:
+    secure: gQzJe724+/q3mKTY1g6SZzuV1CnSIl6tooA11a4CnPSHk96fDALvueMnf8gKaAIwpE4c17cxbozL2W2TqeYRLhGQXRSKp3X5ejaC/OmDhW2k5hM7ppYAerrGjxXv/o7qSCxr/HEEX2TFSgLhPIx6/VGd2ll5UEKqKDX+hB72K7LZOZaW4+rI2blPyZIs18DHjCIrqDBzT7wktZ7nQdnWJ7Zulpg3AjYBkd62644W22zHikooSAcI18NIREBCaxCCKLdPi1TLcZTk+Mqav8YDYptzAU8KddThwA9Rf+wGRdnhHvyfuWcx6GTJA/Iw5IEQVO+ygXAj190vXtOj2C4d+lvoQvSKZEL27LdCuWxX5kYm4bmTpPGyvDS3zI7JRCEokHDeWMCqNuNfvXURiQUdsXlMXcrSMuzytdgnW69c5WBEpY0OboXK3xdoaVcSQiyECaZF9f1OwGR2Zqn5IjQUITfJtT+R+5UhK/T8LrrEWKfJAY9kuC0kFeAIlrh5jzq3uBfQ4XsccyM0K8CkaQ2oQtZiQTnUm82Sw2RlpAvvDJsqy79QrE3+mNu5etfRF1rV1oooi4mW3UJr/5GNZIv80c3FzObEW8FYzdDjJfFs1GJ9941vKATRhSjcdAM51a73LzUtm+mP4N4A5QAd+mdNlxsCDjNCGn7agh/kDwFbdJU=
