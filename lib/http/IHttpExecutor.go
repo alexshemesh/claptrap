@@ -3,6 +3,8 @@ package httpClient
 import "io"
 
 type HttpExecutor interface {
+
+	WithBasicAuth(user string, password string)(HttpExecutor)
 	Get() (retVal HttpExecutor)
 	Put() (retVal HttpExecutor)
 	Post() (retVal HttpExecutor)

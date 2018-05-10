@@ -21,8 +21,8 @@ after_success:
   if [ "$TRAVIS_TAG" != "" ] && [ "$TRAVIS_GO_VERSION" == "1.10.1" ]
   then
     mkdir build
-    CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w -X main.Version=$TRAVIS_TAG" -o build/claptrap-linux-amd64
-    CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w -X main.Version=$TRAVIS_TAG" -o build/claptrap-darwin-amd64
+    CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w -X main.Version=$TRAVIS_TAG" -o build/claptrap-linux-amd64-$TRAVIS_TAG
+    CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w -X main.Version=$TRAVIS_TAG" -o build/claptrap-darwin-amd64-$TRAVIS_TAG
     CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -ldflags="-s -w -X main.Version=$TRAVIS_TAG" -o build/claptrap-windows-amd64
   fi
 script: go test --cover $(go list ./... | grep -v '/vendor/')

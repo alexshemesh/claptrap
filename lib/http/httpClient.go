@@ -17,6 +17,8 @@ type HttpClient struct {
 	timeOut     int
 	reguestID   int
 	requestType string
+	username string
+	password string
 	log         logs.Logger
 }
 
@@ -39,6 +41,12 @@ func (this HttpClient) generateCopyWithOperation(requestType string) (HttpExecut
 	return newVal
 }
 
+func (this HttpClient)WithBasicAuth(user string, password string)(HttpExecutor) {
+	newVal := this
+	newVal.username = user
+	newVal.password = password
+	return newVal
+}
 func (this HttpClient) Get() (retVal HttpExecutor) {
 	return this.generateCopyWithOperation("GET")
 }
@@ -70,6 +78,13 @@ func (this HttpClient)ExecuteWithReader(url string, headers map[string]string, b
 		for k, v := range headers {
 			req.Header.Set(k, v)
 		}
+
+		req.Header.Set("Accept", "*/*")
+
+		if this.username != "" || this.password != "" {
+			req.SetBasicAuth(this.username,this.password)
+		}
+
 		this.log.Debug("Set content type to be " + this.contentType)
 		req.Header.Set("Content-Type", this.contentType)
 		this.log.Debug(fmt.Sprintf("Executing request URL: %s, headers: %s, body: %s", url, headers, body))

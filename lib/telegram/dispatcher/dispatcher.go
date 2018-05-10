@@ -11,6 +11,12 @@ import (
 	"github.com/alexshemesh/claptrap/lib/contracts"
 
 	"strings"
+	"github.com/alexshemesh/claptrap/lib/claymore"
+	"github.com/alexshemesh/claptrap/lib/http"
+	"path"
+	"net/url"
+	"bytes"
+	"encoding/json"
 )
 
 type messageHandler func( contracts.TGCommand)(string,error)
@@ -43,6 +49,8 @@ func (this Dispatcher)Dispatch(bot telegram.TelegramBot, cmd contracts.TGCommand
 		err = this.cmdHandler(this.handleBitfinexAccountCmd, bot, cmd)
 	} else if cmd.Msg.Command() == "login" {
 		err = this.cmdHandler(this.handleLoginCmd, bot, cmd)
+		} else if cmd.Msg.Command() == "miners" {
+			err = this.cmdHandler(this.handleMinerCmd, bot, cmd)
 	} else {
 		err = this.cmdHandler(this.handleUsageCmd, bot, cmd)
 	}
@@ -148,6 +156,13 @@ func (this Dispatcher)handleLoginCmd(cmd contracts.TGCommand )(response string,e
 	return responseText, err
 }
 
+func (this Dispatcher)handleMinerCmd(cmd contracts.TGCommand )(response string,err error){
+
+	minersData,err := GetMinersData()
+	return minersData, err
+}
+
+
 func sendReply(bot telegram.TelegramBot, text string,chatID int64,  replyTo int)(err error){
 	newMsg := tgbotapi.NewMessage(chatID, text)
 	newMsg.ReplyToMessageID = replyTo
@@ -155,4 +170,32 @@ func sendReply(bot telegram.TelegramBot, text string,chatID int64,  replyTo int)
 	return err
 }
 
+func GetMinersData()(retVal string,err error){
+	httpClient := httpClient.NewHttpExecutor().WithBasicAuth("admin", "statuscheck")
+	var u *url.URL
+	u, err = url.Parse(path.Join(""))
+	u.Scheme = "http"
+	u.Host = "10.7.7.2:8193"
 
+	q := u.Query()
+	u.RawQuery = q.Encode()
+	var response []byte
+	body := `{"id":0,"jsonrpc":"2.0","method":"miner_getstat"}`
+	response, err = httpClient.Post().Execute(u.String(), nil, []byte(body))
+	retVal = string(response)
+	if err == nil {
+		err = json.Unmarshal(response, &retVal)
+	}
+	if err != nil {
+		return retVal, err
+	}
+
+	miners := claymore.SplitTable(string(response))
+	var buffer bytes.Buffer
+	for i,miner :=range(miners){
+		minerString := fmt.Sprintf("%d,%s,%s,%s,%s,%s,%s\r\n",i, miner.MinerName,miner.RunningTime,miner.Hashrate[0],miner.Hashrate[1],miner.MiningPool[0], miner.MiningPool[1])
+		buffer.WriteString(minerString)
+		}
+	retVal = string(buffer.Bytes())
+	return retVal,err
+}

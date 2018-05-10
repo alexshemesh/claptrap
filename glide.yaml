@@ -21,3 +21,11 @@ import:
   subpackages:
   - ssh/terminal
 - package: github.com/beldur/kraken-go-api-client
+- package: github.com/stretchr/testify
+  subpackages:
+  - assert
+- package: golang.org/x/net
+  subpackages:
+  - html
+- package: github.com/ghodss/yaml
+  version: ^1.0.0

@@ -1,15 +1,17 @@
-hash: a1cef1ad2cec63bafb917155789bc1acbca256a914d6de64b33e4aea0c2e5b55
-updated: 2018-04-12T17:28:44.341143+03:00
+hash: abce6f55fee4604d09c6be34060c50ee99408747d396a96333560c2ca9d2f2ba
+updated: 2018-05-04T21:00:11.599419+03:00
 imports:
 - name: github.com/beldur/kraken-go-api-client
   version: 8d8ccfe4cc60d1703ffe596c889b887a318a884c
 - name: github.com/bitfinexcom/bitfinex-api-go
-  version: 0021a6a0b3e9bdaddd57a7146c9829367d9885ae
+  version: 9b18c5efaf6cc6d456af58163bbe3927e3f0fbd8
   subpackages:
   - utils
   - v1
 - name: github.com/fsnotify/fsnotify
   version: 4da3e2cfbabc9f751898f250b49f2439785783a1
+- name: github.com/ghodss/yaml
+  version: 0ca9ea5df5451ffdf184b4428c902747c2c11cd7
 - name: github.com/gorilla/websocket
   version: 4201258b820c74ac8e6922fc9e6b52f71fe46f8d
 - name: github.com/hashicorp/hcl
@@ -59,12 +61,20 @@ imports:
   version: e57e3eeb33f795204c1ca35f56c44f83227c6e66
 - name: github.com/spf13/viper
   version: 25b30aa063fc18e48662b86996252eabdcf2f0c7
+- name: github.com/stretchr/testify
+  version: c679ae2cc0cb27ec3293fea7e254e47386f05d69
+  subpackages:
+  - assert
 - name: github.com/technoweenie/multipartstreamer
   version: a90a01d73ae432e2611d178c18367fbaa13e0154
 - name: golang.org/x/crypto
   version: 9419663f5a44be8b34ca85f08abc5fe1be11f8a3
   subpackages:
   - ssh/terminal
+- name: golang.org/x/net
+  version: 66aacef3dd8a676686c7ae3716979581e8b03c47
+  subpackages:
+  - html
 - name: golang.org/x/sys
   version: ebfc5b4631820b793c9010c87fd8fef0f39eb082
   subpackages:
@@ -82,3 +92,11 @@ imports:
 testImports:
 - name: github.com/bouk/monkey
   version: 5dace501dd6dad5b369748946db553903c8e839c
+- name: github.com/davecgh/go-spew
+  version: 782f4967f2dc4564575ca782fe2d04090b5faca8
+  subpackages:
+  - spew
+- name: github.com/pmezard/go-difflib
+  version: 792786c7400a136282c1664665ae0a8db921c6c2
+  subpackages:
+  - difflib
