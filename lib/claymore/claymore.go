@@ -107,13 +107,6 @@ func GetMinersData()(retVal string,err error){
 	var response []byte
 	body := `{"id":0,"jsonrpc":"2.0","method":"miner_getstat"}`
 	response, err = httpClient.Post().Execute(u.String(), nil, []byte(body))
-	retVal = string(response)
-	if err == nil {
-		err = json.Unmarshal(response, &retVal)
-	}
-	if err != nil {
-		return retVal, err
-	}
 
 	miners := SplitTable(string(response))
 	var buffer bytes.Buffer
