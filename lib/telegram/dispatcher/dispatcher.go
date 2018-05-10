@@ -156,6 +156,9 @@ func (this Dispatcher)handleLoginCmd(cmd contracts.TGCommand )(response string,e
 func (this Dispatcher)handleMinerCmd(cmd contracts.TGCommand )(response string,err error){
 
 	minersData,err := claymore.GetMinersData()
+	if minersData == "" {
+		minersData,err = claymore.GetMinersData()
+	}
 	return minersData, err
 }
 
