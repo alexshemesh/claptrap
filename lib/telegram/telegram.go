@@ -89,6 +89,19 @@ func GetMsgContactTitle(msg tgbotapi.Message )(retVal string){
 
 func(this TelegramBot)Send(msg tgbotapi.MessageConfig)(err error){
 	var sentMsg tgbotapi.Message
+
+	sentMsg, err = this.bot.Send(msg)
+	if err == nil{
+		this.log.Debug(fmt.Sprintf("Message %s sent successfuly to %s",sentMsg.Text, GetMsgContactTitle(sentMsg) ))
+	}else{
+		this.log.Error(err)
+	}
+	return err
+}
+
+func(this TelegramBot)SendFile(msg tgbotapi.DocumentConfig)(err error){
+	var sentMsg tgbotapi.Message
+
 	sentMsg, err = this.bot.Send(msg)
 	if err == nil{
 		this.log.Debug(fmt.Sprintf("Message %s sent successfuly to %s",sentMsg.Text, GetMsgContactTitle(sentMsg) ))

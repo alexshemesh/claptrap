@@ -8,6 +8,10 @@ import (
 	"encoding/json"
 	"github.com/ghodss/yaml"
 	"fmt"
+	"net/url"
+	"github.com/alexshemesh/claptrap/lib/http"
+	"bytes"
+	"path"
 )
 
 type MinerEntry struct {
@@ -91,3 +95,32 @@ func SplitTable(tableText string) (retVal []MinerEntry){
 	return retVal
 }
 
+func GetMinersData()(retVal string,err error){
+	httpClient := httpClient.NewHttpExecutor().WithBasicAuth("admin", "statuscheck")
+	var u *url.URL
+	u, err = url.Parse(path.Join(""))
+	u.Scheme = "http"
+	u.Host = "10.7.7.2:8193"
+
+	q := u.Query()
+	u.RawQuery = q.Encode()
+	var response []byte
+	body := `{"id":0,"jsonrpc":"2.0","method":"miner_getstat"}`
+	response, err = httpClient.Post().Execute(u.String(), nil, []byte(body))
+	retVal = string(response)
+	if err == nil {
+		err = json.Unmarshal(response, &retVal)
+	}
+	if err != nil {
+		return retVal, err
+	}
+
+	miners := SplitTable(string(response))
+	var buffer bytes.Buffer
+	for i,miner :=range(miners){
+		minerString := fmt.Sprintf("%d,%s,%s,%s,%s,%s,%s\r\n",i, miner.MinerName,miner.RunningTime,miner.Hashrate[0],miner.Hashrate[1],miner.MiningPool[0], miner.MiningPool[1])
+		buffer.WriteString(minerString)
+	}
+	retVal = string(buffer.Bytes())
+	return retVal,err
+}
