@@ -4,6 +4,7 @@ import (
 	"github.com/alexshemesh/claptrap/lib/logs"
 	"github.com/alexshemesh/claptrap/lib/telegram"
 	"gopkg.in/telegram-bot-api.v4"
+
 	"time"
 	"fmt"
 	"github.com/alexshemesh/claptrap/lib/markets/kuna"
@@ -165,7 +166,8 @@ func sendReply(bot telegram.TelegramBot, text string,chatID int64,  replyTo int)
 		newMsg.ReplyToMessageID = replyTo
 		err = bot.Send(newMsg)
 	}else{
-		document := tgbotapi.NewDocumentUpload(chatID, text)
+		fileBytes := tgbotapi.FileBytes{Name: "Result",Bytes: []byte(text)}
+		document := tgbotapi.NewDocumentUpload(chatID, fileBytes)
 		err = bot.SendFile(document)
 	}
 	return err
