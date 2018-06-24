@@ -9,36 +9,36 @@ import (
 	"fmt"
 	"github.com/alexshemesh/claptrap/lib/markets/kuna"
 	"github.com/alexshemesh/claptrap/lib/markets/bitfinex"
-	"github.com/alexshemesh/claptrap/lib/contracts"
+	"github.com/alexshemesh/claptrap/lib/types"
 
 	"strings"
 	"github.com/alexshemesh/claptrap/lib/claymore"
 
 )
 
-type messageHandler func( contracts.TGCommand)(string,error)
+type messageHandler func( types.TGCommand)(string,error)
 
 var ProgramVersion string
 
 type Dispatcher struct {
 	log logs.Logger
 
-	auth contracts.Auth
+	auth types.Auth
 }
 
-func NewDispatcher(logPar logs.Logger, authPar contracts.Auth)(retVal *Dispatcher) {
+func NewDispatcher(logPar logs.Logger, authPar types.Auth)(retVal *Dispatcher) {
 	retVal = &Dispatcher{log: logPar,auth:authPar }
 	return retVal
 }
 
-func (this Dispatcher) CheckAuth(userName string)(retVal contracts.Settings, err error){
+func (this Dispatcher) CheckAuth(userName string)(retVal types.Settings, err error){
 	retVal,_,err = this.auth.LogInCached(userName)
 	return retVal,err
 }
 
 
 
-func (this Dispatcher)Dispatch(bot telegram.TelegramBot, cmd contracts.TGCommand)(err error){
+func (this Dispatcher)Dispatch(bot telegram.TelegramBot, cmd types.TGCommand)(err error){
 
 	if cmd.Msg.Command() == "kuna_orders_book" {
 		err = this.cmdHandler(this.handleKunaOrdersBookCmd,bot, cmd)
@@ -54,7 +54,7 @@ func (this Dispatcher)Dispatch(bot telegram.TelegramBot, cmd contracts.TGCommand
 	return err
 }
 
-func (this Dispatcher)cmdHandler(functionToRun messageHandler,bot telegram.TelegramBot, cmd contracts.TGCommand )(err error) {
+func (this Dispatcher)cmdHandler(functionToRun messageHandler,bot telegram.TelegramBot, cmd types.TGCommand )(err error) {
 	startTime := cmd.Msg.Time()
 	var responseText string
 	if cmd.Msg.Command() != "login" {
@@ -78,7 +78,7 @@ func (this Dispatcher)cmdHandler(functionToRun messageHandler,bot telegram.Teleg
 	return err
 }
 
-func (this Dispatcher)handleUsageCmd( cmd contracts.TGCommand )(response string, err error){
+func (this Dispatcher)handleUsageCmd( cmd types.TGCommand )(response string, err error){
 
 	responseText := fmt.Sprintf( "Hi there. This is Clpatrap (v %s) talking. This is the list of available commands\n", ProgramVersion)
 	responseText = responseText + "/login\n"
@@ -89,7 +89,7 @@ func (this Dispatcher)handleUsageCmd( cmd contracts.TGCommand )(response string,
 	return responseText, err
 }
 
-func (this Dispatcher)handleKunaOrdersBookCmd(cmd contracts.TGCommand )(responseText string,err error){
+func (this Dispatcher)handleKunaOrdersBookCmd(cmd types.TGCommand )(responseText string,err error){
 
 
 	kunaClient := kuna.NewKunaClient(this.log)
@@ -113,12 +113,12 @@ func (this Dispatcher)handleKunaOrdersBookCmd(cmd contracts.TGCommand )(response
 	return responseText,err
 }
 
-func (this Dispatcher)handleBitfinexAccountCmd(cmd contracts.TGCommand )(response string,err error){
+func (this Dispatcher)handleBitfinexAccountCmd(cmd types.TGCommand )(response string,err error){
 
 	var responseText string
 
 	bitfinexClnt := bitfinexClient.NewBitfinexClient(this.log, cmd.Settings)
-	var balance contracts.Balance
+	var balance types.Balance
 	balance,err = bitfinexClnt.GetBalance()
 	if err == nil {
 		responseText = responseText + "Bitfinex Balances:\r\n"
@@ -132,11 +132,11 @@ func (this Dispatcher)handleBitfinexAccountCmd(cmd contracts.TGCommand )(respons
 	return responseText,err
 }
 
-func (this Dispatcher)handleLoginCmd(cmd contracts.TGCommand )(response string,err error){
+func (this Dispatcher)handleLoginCmd(cmd types.TGCommand )(response string,err error){
 
 	var params []string
 	params = strings.Split(cmd.Msg.Text," ")
-	var localAuth contracts.Auth
+	var localAuth types.Auth
 	_, localAuth,err = this.auth.LogIn(cmd.Msg.Chat.UserName, params[1])
 
 	responseText := "OK"
@@ -153,11 +153,11 @@ func (this Dispatcher)handleLoginCmd(cmd contracts.TGCommand )(response string,e
 	return responseText, err
 }
 
-func (this Dispatcher)handleMinerCmd(cmd contracts.TGCommand )(response string,err error){
-
-	minersData,err := claymore.GetMinersData()
+func (this Dispatcher)handleMinerCmd(cmd types.TGCommand )(response string,err error){
+	claymoreClient := claymore.NewClaymoreManagerClient(this.log,cmd.Settings)
+	minersData,err := claymoreClient.GetMinersData()
 	if minersData == "" {
-		minersData,err = claymore.GetMinersData()
+		minersData,err = claymoreClient.GetMinersData()
 	}
 	return minersData, err
 }

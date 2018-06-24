@@ -1,4 +1,4 @@
-package contracts
+package types
 
 type Settings interface {
 	GetValue(path string)(retVal string, err error)

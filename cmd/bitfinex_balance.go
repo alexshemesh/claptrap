@@ -18,7 +18,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/alexshemesh/claptrap/lib/logs"
 	"os"
-	"github.com/alexshemesh/claptrap/lib/contracts"
+	"github.com/alexshemesh/claptrap/lib/types"
 	"github.com/alexshemesh/claptrap/lib/vault"
 	"github.com/alexshemesh/claptrap/lib/markets/bitfinex"
 	"fmt"
@@ -48,9 +48,9 @@ func init() {
 
 }
 
-func runBitfinexBalance( log logs.Logger, settings contracts.Settings)(err error){
+func runBitfinexBalance( log logs.Logger, settings types.Settings)(err error){
 	bitfinexClient := bitfinexClient.NewBitfinexClient(log, settings)
-	var balance contracts.Balance
+	var balance types.Balance
 	balance,err = bitfinexClient.GetBalance()
 	if err == nil {
 		log.Log("Bitfinex Balances:")

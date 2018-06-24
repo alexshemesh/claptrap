@@ -1,5 +1,10 @@
-package contracts
-import "gopkg.in/telegram-bot-api.v4"
+package types
+
+import (
+	"gopkg.in/telegram-bot-api.v4"
+
+	"time"
+)
 
 type WalletPosition struct {
 	Type string
@@ -17,4 +22,12 @@ type Balance struct {
 type TGCommand struct {
 	Msg *tgbotapi.Message
 	Settings Settings
+}
+
+type TransactionEntry struct{
+	Time time.Time
+	Currency string
+	FromAddress string
+	ToAddress string
+	Value float64
 }

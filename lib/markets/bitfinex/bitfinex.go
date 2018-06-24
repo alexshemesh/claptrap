@@ -2,7 +2,7 @@ package bitfinexClient
 
 import (
 	"github.com/bitfinexcom/bitfinex-api-go/v1"
-	"github.com/alexshemesh/claptrap/lib/contracts"
+	"github.com/alexshemesh/claptrap/lib/types"
 	"github.com/alexshemesh/claptrap/lib/logs"
 	"strconv"
 )
@@ -14,7 +14,7 @@ type Bitfinex struct {
 }
 
 
-func NewBitfinexClient(logPar logs.Logger, settings contracts.Settings)( retVal *Bitfinex ){
+func NewBitfinexClient(logPar logs.Logger, settings types.Settings)( retVal *Bitfinex ){
 	retVal = &Bitfinex{log:logPar }
 
 	retVal.apikey,_ = settings.GetValue("bitfinex/apikey")
@@ -22,7 +22,7 @@ func NewBitfinexClient(logPar logs.Logger, settings contracts.Settings)( retVal 
 	return retVal
 }
 
-func (this Bitfinex) GetBalance( ) (retVal contracts.Balance, err error )  {
+func (this Bitfinex) GetBalance( ) (retVal types.Balance, err error )  {
 	client := bitfinex.NewClient().Auth(this.apikey, this.secret)
 	var RawBalances []bitfinex.WalletBalance
 
@@ -30,7 +30,7 @@ func (this Bitfinex) GetBalance( ) (retVal contracts.Balance, err error )  {
 	if err == nil {
 		for _,item := range(RawBalances) {
 			amountAsFloat,_ := strconv.ParseFloat(item.Amount, 64)
-			newVal := contracts.WalletPosition{Name: item.Currency,  Amount: amountAsFloat  }
+			newVal := types.WalletPosition{Name: item.Currency,  Amount: amountAsFloat  }
 			retVal.Positions = append(retVal.Positions, newVal )
 		}
 	}

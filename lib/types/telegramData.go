@@ -1,4 +1,4 @@
-package contracts
+package types
 
 import (
 //	"github.com/rs/xid"

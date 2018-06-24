@@ -23,7 +23,7 @@ import (
 	"os"
 	"github.com/alexshemesh/claptrap/lib/telegram"
 	"gopkg.in/telegram-bot-api.v4"
-	"github.com/alexshemesh/claptrap/lib/contracts"
+	"github.com/alexshemesh/claptrap/lib/types"
 
 	"github.com/alexshemesh/claptrap/lib/telegram/dispatcher"
 )
@@ -51,24 +51,24 @@ func init() {
 	telegramCmd.AddCommand(checkmsgCmd)
 }
 
-func procCommandv2(log logs.Logger,bot telegram.TelegramBot, msg tgbotapi.Message ,auth contracts.Auth)(err error){
+func procCommandv2(log logs.Logger,bot telegram.TelegramBot, msg tgbotapi.Message ,auth types.Auth)(err error){
 
 	disp := dispatcher.NewDispatcher(log,auth)
-	cmd := contracts.TGCommand{}
+	cmd := types.TGCommand{}
 	cmd.Msg = &msg
 	err = disp.Dispatch(bot,cmd )
 	return err
 }
 
 
-func procMessage(log logs.Logger,bot telegram.TelegramBot, msg tgbotapi.Message,auth contracts.Auth)(err error){
+func procMessage(log logs.Logger,bot telegram.TelegramBot, msg tgbotapi.Message,auth types.Auth)(err error){
 	log.Log(fmt.Sprintf( "User \"%s\" sent us message \"%s\"", log.CS.Green(telegram.GetMsgContactTitle(msg)), log.CS.Green(msg.Text)))
 	err = procCommandv2(log,bot,msg,auth)
 
 	return err
 }
 
-func runCheckMsg(log logs.Logger,auth contracts.Auth,settingsHandler contracts.Settings)(err error){
+func runCheckMsg(log logs.Logger,auth types.Auth,settingsHandler types.Settings)(err error){
 	telegramBot := telegram.NewTelegramBot(log,settingsHandler)
 	err = telegramBot.Connect()
 	if err == nil{

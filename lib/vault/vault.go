@@ -14,7 +14,7 @@ import (
 
 	garbler "github.com/michaelbironneau/garbler/lib"
 
-	"github.com/alexshemesh/claptrap/lib/contracts"
+	"github.com/alexshemesh/claptrap/lib/types"
 
 	"strings"
 )
@@ -292,7 +292,7 @@ func (this VaultClient)CreateDefaultPolicyForUser( userName string ) (  err erro
 }
 
 
-func (this VaultClient)LogInCached(userName string)(retObjSettings contracts.Settings,retObjAuth contracts.Auth ,err error){
+func (this VaultClient)LogInCached(userName string)(retObjSettings types.Settings,retObjAuth types.Auth ,err error){
 	var token,tokenName string
 	token,err = this.GetValue("tokens/" + userName)
 	tokenName,err = this.LookupToken(token)
@@ -312,7 +312,7 @@ func (this VaultClient)RenewToken()(err error){
 	return err
 }
 
-func (this VaultClient)LogIn( userName string, password string ) ( retObjSettings contracts.Settings,retObjAuth contracts.Auth ,err error){
+func (this VaultClient)LogIn( userName string, password string ) ( retObjSettings types.Settings,retObjAuth types.Auth ,err error){
 	retVal := this
 	http := httpClient.NewHttpExecutor()
 

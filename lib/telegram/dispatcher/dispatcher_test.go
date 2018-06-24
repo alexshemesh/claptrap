@@ -6,7 +6,7 @@ import (
 	"github.com/alexshemesh/claptrap/lib/vault"
 	"github.com/alexshemesh/claptrap/lib/telegram"
 	"gopkg.in/telegram-bot-api.v4"
-	"github.com/alexshemesh/claptrap/lib/contracts"
+	"github.com/alexshemesh/claptrap/lib/types"
 	"github.com/bouk/monkey"
 	"strings"
 )
@@ -32,7 +32,7 @@ func Test_UnknownCommand( t *testing.T){
 	log := *logs.NewLogger("test dispatcher")
 	disp := NewDispatcher(log,settingsPar)
 	bot := telegram.NewTelegramBot(log, settingsPar)
-	cmd := contracts.TGCommand{}
+	cmd := types.TGCommand{}
 	cmd.Msg = &tgbotapi.Message{}
 	cmd.Msg.MessageID = 24
 
@@ -68,7 +68,7 @@ func Test_KunaOrdersCommand_NoAuth( t *testing.T){
 
 
 	bot := telegram.NewTelegramBot(log, settingsPar)
-	cmd := contracts.TGCommand{}
+	cmd := types.TGCommand{}
 	cmd.Msg = &tgbotapi.Message{}
 	cmd.Msg.MessageID = 24
 
@@ -109,7 +109,7 @@ func Test_LoginCommand( t *testing.T){
 
 
 	bot := telegram.NewTelegramBot(log, settingsPar)
-	cmd := contracts.TGCommand{}
+	cmd := types.TGCommand{}
 	cmd.Msg = &tgbotapi.Message{}
 
 	cmd.Msg.MessageID = 24

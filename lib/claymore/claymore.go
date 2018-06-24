@@ -12,43 +12,35 @@ import (
 	"github.com/alexshemesh/claptrap/lib/http"
 	"bytes"
 	"path"
+	"github.com/alexshemesh/claptrap/lib/types"
+	"github.com/alexshemesh/claptrap/lib/logs"
 )
 
-type MinerEntry struct {
-	MinerName   string
-	Currency    string
-	RunningTime string
-	Hashrate    []string
-	MiningPool  []string
+type ClaymoreManagerClient struct {
+	log      logs.Logger
+	address  string
+	username string
+	password string
 }
 
-func ParseString(RawData string) (retVal []MinerEntry, err error) {
+func NewClaymoreManagerClient(logPar logs.Logger, settings types.Settings) (retVal *ClaymoreManagerClient) {
+	retVal = &ClaymoreManagerClient{log: logPar,
+	}
+	retVal.address, _ = settings.GetValue("claymore/address")
+	retVal.username, _ = settings.GetValue("claymore/uname")
+	retVal.password, _ = settings.GetValue("claymore/password")
+	return retVal
+}
+
+func ParseString(RawData string) (retVal []types.MinerEntry, err error) {
 
 	return retVal, err
 }
 
-func (this *MinerEntry) SetFieldForIndex(data string, index int) {
-	if index == 0 {
-		this.MinerName = data
-	} else if index == 2 {
-		this.RunningTime = data
-	} else if index == 3 {
-		this.Hashrate[0] = data
-	} else if index == 4 {
-		this.Hashrate[1] = data
-	} else if index == 6 {
-		minerpools := strings.Split(data, ";")
-		this.MiningPool[0] = minerpools[0]
-		if len(minerpools) >1 {
-			this.MiningPool[1] = minerpools[1]
-		}
-	}
-}
-
-func parseMinerInfoFromRawData(data string) (retVal *MinerEntry, err error) {
+func parseMinerInfoFromRawData(data string) (retVal *types.MinerEntry, err error) {
 	ok := strings.Contains(data, "<td>")
 	if ok {
-		retVal = &MinerEntry{Hashrate: make([]string, 2), MiningPool: make([]string, 2)}
+		retVal = &types.MinerEntry{Hashrate: make([]string, 2), MiningPool: make([]string, 2)}
 		rp, err := regexp.Compile("(COLOR=(.*)>(.*)<)")
 		if err != nil {
 			return retVal, err
@@ -82,25 +74,27 @@ func ObjectAsYAMLToString(obj interface{}) (retVal string) {
 	return "\n" + string(objectasYaml)
 }
 
-func SplitTable(tableText string) (retVal []MinerEntry){
+func SplitTable(tableText string) (retVal []types.MinerEntry) {
 	lines := strings.Split(tableText, "<tr>")
 	for _, val := range (lines) {
 		miner, err := parseMinerInfoFromRawData(val)
 		if err == nil {
-			fmt.Printf("Miner: %s, RunningTime: %s, HashRate1: %s for pool1:%s, HashRate2: %s, for pool2: %s" , miner.MinerName, miner.RunningTime, miner.Hashrate[0], miner.MiningPool[0],miner.Hashrate[1], miner.MiningPool[1])
+			fmt.Printf("Miner: %s, RunningTime: %s, HashRate1: %s for pool1:%s, HashRate2: %s, for pool2: %s", miner.MinerName, miner.RunningTime, miner.Hashrate[0], miner.MiningPool[0], miner.Hashrate[1], miner.MiningPool[1])
 			println("========================================")
-			retVal = append(retVal,*miner)
+			retVal = append(retVal, *miner)
 		}
 	}
 	return retVal
 }
 
-func GetMinersData()(retVal string,err error){
-	httpClient := httpClient.NewHttpExecutor().WithBasicAuth("admin", "statuscheck")
+func (this ClaymoreManagerClient) GetMinersData() (retVal string, err error) {
+	//admin
+	//statuscheck
+	httpClient := httpClient.NewHttpExecutor().WithBasicAuth(this.username, this.password)
 	var u *url.URL
 	u, err = url.Parse(path.Join(""))
 	u.Scheme = "http"
-	u.Host = "10.7.7.2:8193"
+	u.Host = this.address +":8193"
 
 	q := u.Query()
 	u.RawQuery = q.Encode()
@@ -110,10 +104,14 @@ func GetMinersData()(retVal string,err error){
 
 	miners := SplitTable(string(response))
 	var buffer bytes.Buffer
-	for i,miner :=range(miners){
-		minerString := fmt.Sprintf("%d,%s,%s,%s,%s,%s,%s\r\n",i, miner.MinerName,miner.RunningTime,miner.Hashrate[0],miner.Hashrate[1],miner.MiningPool[0], miner.MiningPool[1])
+	for _, miner := range (miners) {
+		minerString := miner.ShortDesc()
 		buffer.WriteString(minerString)
 	}
 	retVal = string(buffer.Bytes())
-	return retVal,err
+	return retVal, err
 }
+
+//https://api.etherscan.io/api?module=logs&action=getLogs&fromBlock=0&toBlock=latest&address=0xd25e81504e0aea1e1343d61581296bc3c460978b&topic0=0x7bed72de3ef4a9b073e620379f5c21d965578a70
+
+//http://api.etherscan.io/api?module=account&action=txlist&address=0x7bed72de3ef4a9b073e620379f5c21d965578a70&sort=asc

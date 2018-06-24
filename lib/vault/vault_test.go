@@ -11,7 +11,7 @@ import (
 	"io/ioutil"
 	"github.com/Jeffail/gabs"
 	"os"
-	"github.com/alexshemesh/claptrap/lib/contracts"
+	"github.com/alexshemesh/claptrap/lib/types"
 )
 
 func Test_vaultIsInitialized_true(t *testing.T){
@@ -324,7 +324,7 @@ func XTestIntegration_CreateUser(t *testing.T){
 	}
 
 
-	var localAuth contracts.Auth
+	var localAuth types.Auth
 
 	_,localAuth,err = vault.LogIn(userName,returnedPassword)
 	if err != nil {

@@ -1,7 +1,7 @@
 package telegram
 
 import (
-	"github.com/alexshemesh/claptrap/lib/contracts"
+	"github.com/alexshemesh/claptrap/lib/types"
 	"testing"
 	"github.com/alexshemesh/claptrap/lib/logs"
 	"github.com/alexshemesh/claptrap/lib/vault"
@@ -64,7 +64,7 @@ func Test_GetMessages_NoPreviousData(t *testing.T){
 		t.Error("No telegram data")
 	}
 
-	var newSettingsStruct contracts.TelegramSettings
+	var newSettingsStruct types.TelegramSettings
 	err = json.Unmarshal([]byte(newSettings), &newSettingsStruct )
 	if err != nil {
 		t.Error(err)
@@ -116,7 +116,7 @@ func Test_GetMessages_WithPreviousData(t *testing.T){
 		t.Error("No telegram data")
 	}
 
-	var newSettingsStruct contracts.TelegramSettings
+	var newSettingsStruct types.TelegramSettings
 	err = json.Unmarshal([]byte(newSettings), &newSettingsStruct )
 	if err != nil {
 		t.Error(err)
@@ -168,7 +168,7 @@ func Test_GetMessages_404(t *testing.T){
 		t.Error("No telegram data")
 	}
 
-	var newSettingsStruct contracts.TelegramSettings
+	var newSettingsStruct types.TelegramSettings
 	err = json.Unmarshal([]byte(newSettings), &newSettingsStruct )
 	if err != nil {
 		t.Error(err)

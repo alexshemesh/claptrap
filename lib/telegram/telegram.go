@@ -5,21 +5,21 @@ import (
 	"gopkg.in/telegram-bot-api.v4"
 	"fmt"
 
-	"github.com/alexshemesh/claptrap/lib/contracts"
+	"github.com/alexshemesh/claptrap/lib/types"
 	"encoding/json"
 )
 
 var settingsKey = "telegram/settings"
 
 type TelegramBot struct{
-	log logs.Logger
-	token string
-	bot *tgbotapi.BotAPI
-	settingsHandler contracts.Settings
+	log             logs.Logger
+	token           string
+	bot             *tgbotapi.BotAPI
+	settingsHandler types.Settings
 }
 
 
-func NewTelegramBot(logPar logs.Logger, settingsHandlerPar contracts.Settings)(retVal *TelegramBot) {
+func NewTelegramBot(logPar logs.Logger, settingsHandlerPar types.Settings)(retVal *TelegramBot) {
 	tokenPar,err := settingsHandlerPar.GetValue("telegram/token" )
 	if err == nil {
 		retVal = &TelegramBot{log: logPar, token: tokenPar, settingsHandler: settingsHandlerPar }
@@ -32,7 +32,7 @@ func (this *TelegramBot)Connect()(err error){
 	return err
 }
 
-func (this TelegramBot)getSettings()(retVal contracts.TelegramSettings, err error){
+func (this TelegramBot)getSettings()(retVal types.TelegramSettings, err error){
 	var data string
 	data,err = this.settingsHandler.GetValue(settingsKey)
 	if err == nil && data  != "" {
@@ -42,7 +42,7 @@ func (this TelegramBot)getSettings()(retVal contracts.TelegramSettings, err erro
 }
 
 func (this TelegramBot)GetMessages(  )(retVal []tgbotapi.Message, err error) {
-	var settings contracts.TelegramSettings
+	var settings types.TelegramSettings
 	settings, err = this.getSettings( )
 	if err == nil || err.Error() == "404 Not Found"{
 		u := tgbotapi.NewUpdate(settings.LastUpdate + 1)

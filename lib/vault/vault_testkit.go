@@ -2,7 +2,7 @@ package vault
 
 import (
 	"fmt"
-	"github.com/alexshemesh/claptrap/lib/contracts"
+	"github.com/alexshemesh/claptrap/lib/types"
 )
 
 type VaultTestKit struct {
@@ -47,7 +47,7 @@ func (this VaultTestKit)SetErrorEmulation(path string, value  error ) {
 }
 
 
-func (this VaultTestKit)LogIn( userName string, password string ) ( retObjSettings contracts.Settings,retObjAuth contracts.Auth ,err error){
+func (this VaultTestKit)LogIn( userName string, password string ) ( retObjSettings types.Settings,retObjAuth types.Auth ,err error){
 	if !this.loginRes {
 		err = fmt.Errorf("Authentication Failed")
 	}else{
@@ -57,7 +57,7 @@ func (this VaultTestKit)LogIn( userName string, password string ) ( retObjSettin
 
 }
 
-func (this VaultTestKit)LogInCached(userName string)(retObjSettings contracts.Settings,retObjAuth contracts.Auth ,err error){
+func (this VaultTestKit)LogInCached(userName string)(retObjSettings types.Settings,retObjAuth types.Auth ,err error){
 	if !this.loginRes {
 		err = fmt.Errorf("Authentication Failed")
 	}

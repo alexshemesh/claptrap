@@ -23,7 +23,7 @@ import (
 
 	"github.com/alexshemesh/claptrap/lib/vault"
 	"github.com/alexshemesh/claptrap/lib/telegram"
-	"github.com/alexshemesh/claptrap/lib/contracts"
+	"github.com/alexshemesh/claptrap/lib/types"
 )
 
 // pingCmd represents the ping command
@@ -53,7 +53,7 @@ func init() {
 
 }
 
-func runPing(log logs.Logger, settingsHandler contracts.Settings)(err error){
+func runPing(log logs.Logger, settingsHandler types.Settings)(err error){
 	telegramBot := telegram.NewTelegramBot(log,settingsHandler)
 	err = telegramBot.Connect()
 	if err == nil{

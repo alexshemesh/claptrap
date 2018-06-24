@@ -5,7 +5,7 @@ import (
 	"github.com/alexshemesh/claptrap/lib/http"
 	"net/url"
 	"path"
-	"github.com/alexshemesh/claptrap/lib/contracts"
+	"github.com/alexshemesh/claptrap/lib/types"
 	"encoding/json"
 )
 
@@ -19,7 +19,7 @@ func NewKunaClient(logPar logs.Logger)(retVal *KunaClient){
 	return retVal
 }
 
-func (this KunaClient) GetOrdersBook()( retVal contracts.KunaOrdersBook, err error ){
+func (this KunaClient) GetOrdersBook()( retVal types.KunaOrdersBook, err error ){
 	this.log.Log("Executing GetOrdersBook for Kuna market")
 	httpClient := httpClient.NewHttpExecutor()
 	var u *url.URL

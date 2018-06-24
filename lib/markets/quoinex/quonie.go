@@ -9,7 +9,7 @@ import (
 	"encoding/base64"
 	"fmt"
 	"time"
-	"github.com/alexshemesh/claptrap/lib/contracts"
+	"github.com/alexshemesh/claptrap/lib/types"
 	httphelper "github.com/alexshemesh/claptrap/lib/http"
 	"strings"
 
@@ -112,7 +112,7 @@ func (this QuoineApi)performGetRequest(urlPath string, values url.Values){
 	}
 }
 
-func (this QuoineApi)parseBalance()(retVal contracts.Balance, err error){
+func (this QuoineApi)parseBalance()(retVal types.Balance, err error){
 
 	return retVal,err
 }
