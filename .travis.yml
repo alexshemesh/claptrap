@@ -16,14 +16,14 @@ install: glide install
 after_success:
 - |-
   echo "After Success:"
-  echo $TRAVIS_TAG
+  echo $TRAVIS_BUILD_NUMBER
   echo $TRAVIS_GO_VERSION
-  if [ "$TRAVIS_TAG" != "" ] && [ "$TRAVIS_GO_VERSION" == "1.10.1" ]
+  if  [ "$TRAVIS_GO_VERSION" == "1.10.1" ]
   then
     mkdir build
-    CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w -X main.Version=$TRAVIS_TAG" -o build/claptrap-linux-amd64-$TRAVIS_TAG
-    CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w -X main.Version=$TRAVIS_TAG" -o build/claptrap-darwin-amd64-$TRAVIS_TAG
-    CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -ldflags="-s -w -X main.Version=$TRAVIS_TAG" -o build/claptrap-windows-amd64
+    CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w -X main.Version=$TRAVIS_BUILD_NUMBER" -o build/claptrap-linux-amd64-$TRAVIS_BUILD_NUMBER
+    CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w -X main.Version=$TRAVIS_BUILD_NUMBER" -o build/claptrap-darwin-amd64-$TRAVIS_BUILD_NUMBER
+    CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -ldflags="-s -w -X main.Version=$TRAVIS_BUILD_NUMBER" -o build/claptrap-windows-amd64
   fi
 script: go test --cover $(go list ./... | grep -v '/vendor/')
 deploy:
@@ -38,4 +38,4 @@ deploy:
   skip_cleanup: true
   on:
     repo: alexshemesh/claptrap
-    tags: true
+
