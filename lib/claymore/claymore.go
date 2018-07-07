@@ -127,7 +127,7 @@ func (this ClaymoreManagerClient)GetMinersData() (retVal map[string]types.MinerE
 func compareTwoMiners(newMiner types.MinerEntry,oldMiner types.MinerEntry)(res bool, reasons []string,err error){
 	res = true
 	if len(newMiner.Cards) != len(oldMiner.Cards) {
-		reasons = append(reasons,fmt.Sprintf("%s Number of cards different %d != %d ",newMiner.MinerName,len(newMiner.Cards), len(oldMiner.Cards)  ))
+		reasons = append(reasons,fmt.Sprintf("%s Number of cards different %d -> %d ",newMiner.MinerName, len(oldMiner.Cards),len(newMiner.Cards)  ))
 		res = false
 	}else {
 		oldHashRate0,_ := strconv.ParseFloat(newMiner.Hashrate[0], 64)
@@ -135,10 +135,10 @@ func compareTwoMiners(newMiner types.MinerEntry,oldMiner types.MinerEntry)(res b
 		newHashRate0,_ := strconv.ParseFloat(oldMiner.Hashrate[0], 64)
 		newHashRate1,_ := strconv.ParseFloat(oldMiner.Hashrate[1], 64)
 		if oldHashRate0 / newHashRate0 < (1 - hashRateGap) || oldHashRate0 / newHashRate0 > (1 + hashRateGap){
-			reasons = append(reasons,fmt.Sprintf(" %s Primary hasrate changed  %s != %s ",newMiner.MinerName,newMiner.Hashrate[0], oldMiner.Hashrate[0]  ))
+			reasons = append(reasons,fmt.Sprintf(" %s Primary hashrate changed  %s -> %s ",newMiner.MinerName, oldMiner.Hashrate[0],newMiner.Hashrate[0]  ))
 			res = false
 		}else if oldHashRate1 / newHashRate1 < (1 - hashRateGap) || oldHashRate1 / newHashRate1 > (1 + hashRateGap){
-			reasons = append(reasons,fmt.Sprintf("%s Secondary hasrate changed  %s != %s ",newMiner.MinerName,newMiner.Hashrate[1], oldMiner.Hashrate[1]  ))
+			reasons = append(reasons,fmt.Sprintf("%s Secondary hashrate changed  %s -> %s ",newMiner.MinerName,oldMiner.Hashrate[1],newMiner.Hashrate[1] ))
 			res = false
 		}
 	}
