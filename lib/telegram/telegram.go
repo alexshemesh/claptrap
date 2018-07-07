@@ -110,3 +110,21 @@ func(this TelegramBot)SendFile(msg tgbotapi.DocumentConfig)(err error){
 	}
 	return err
 }
+
+func (this TelegramBot)CheckUpdates()(err error){
+
+	u := tgbotapi.NewUpdate(0)
+	u.Timeout = 60
+
+	updates, err := this.bot.GetUpdatesChan(u)
+
+	for update := range updates {
+		if update.Message == nil {
+			continue
+		}
+
+		this.log.Log(fmt.Sprintf("[%d] %s", update.Message.Chat.ID, update.Message.Text))
+	}
+	return err
+}
+

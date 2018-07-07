@@ -81,9 +81,9 @@ func (this Dispatcher)cmdHandler(functionToRun messageHandler,bot telegram.Teleg
 func (this Dispatcher)handleUsageCmd( cmd types.TGCommand )(response string, err error){
 
 	responseText := fmt.Sprintf( "Hi there. This is Clpatrap (v %s) talking. This is the list of available commands\n", ProgramVersion)
-	responseText = responseText + "/login\n"
-	responseText = responseText + "/kuna_orders_book\n"
-	responseText = responseText + "/bitfinex_account\n"
+	responseText = responseText + "/miners\n"
+	//responseText = responseText + "/kuna_orders_book\n"
+	//responseText = responseText + "/bitfinex_account\n"
 
 
 	return responseText, err
@@ -155,9 +155,9 @@ func (this Dispatcher)handleLoginCmd(cmd types.TGCommand )(response string,err e
 
 func (this Dispatcher)handleMinerCmd(cmd types.TGCommand )(response string,err error){
 	claymoreClient := claymore.NewClaymoreManagerClient(this.log,cmd.Settings)
-	minersData,err := claymoreClient.GetMinersData()
+	minersData,err := claymoreClient.GetMinersDataAsString()
 	if minersData == "" {
-		minersData,err = claymoreClient.GetMinersData()
+		minersData,err = claymoreClient.GetMinersDataAsString()
 	}
 	return minersData, err
 }

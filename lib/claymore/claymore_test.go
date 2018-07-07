@@ -24,7 +24,7 @@ func Test_ParseCards(t *testing.T){
 	results := SplitTable(string(fileContent))
 	assert.NotEqual(t, 0, len(results))
 
-	secondCard := results[1]
+	secondCard := results["gemb66"]
 	assert.NotEqual(t,0 , len(secondCard.Cards))
 }
 
@@ -42,4 +42,38 @@ func INtegrationTest_GetMinersData(t *testing.T){
 	assert.NoError(t,err)
 	assert.NotNil(t, res)
 
+}
+
+func Test_CompareLessCards( t *testing.T){
+	settings := vault.NewVaultTestKit()
+	log := logs.NewLogger("GetMinersData test")
+	client := NewClaymoreManagerClient(*log, settings)
+
+	oldMiners,err := client.LoadMinersFromFile(path.Join("..","..","testdata","miners.json"))
+	assert.NoError(t,err)
+
+	newMiners,err := client.LoadMinersFromFile(path.Join("..","..","testdata","miners_lesscards.json"))
+	assert.NoError(t,err)
+
+	res,reasons, err := client.CompareSetOfMiners(oldMiners,newMiners)
+	assert.NoError(t,err)
+	assert.Equal(t, false,res)
+	assert.NotEqual(t, "",reasons)
+}
+
+func Test_CompareHashrate( t *testing.T){
+	settings := vault.NewVaultTestKit()
+	log := logs.NewLogger("GetMinersData test")
+	client := NewClaymoreManagerClient(*log, settings)
+
+	oldMiners,err := client.LoadMinersFromFile(path.Join("..","..","testdata","miners.json"))
+	assert.NoError(t,err)
+
+	newMiners,err := client.LoadMinersFromFile(path.Join("..","..","testdata","miners_lowhashrate.json"))
+	assert.NoError(t,err)
+
+	res,reasons, err := client.CompareSetOfMiners(oldMiners,newMiners)
+	assert.NoError(t,err)
+	assert.Equal(t, false,res)
+	assert.NotEqual(t, "",reasons)
 }

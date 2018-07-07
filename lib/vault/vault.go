@@ -19,15 +19,28 @@ import (
 	"strings"
 )
 
-type DataToSet struct {
+type InternalData struct {
 	Key string `json:"key"`
 }
+
+type DataToSet struct {
+	Data InternalData `json:"data"`
+}
+
+
 
 type VaultClient struct {
 	ServerURL  string
 	Token      string
 	UserDomain string
 	log        logs.Logger
+}
+
+
+func NewVaultData(data string)(retVal DataToSet){
+	retVal = DataToSet{}
+	retVal.Data.Key = data
+	return retVal
 }
 
 func calcPolicyName(userName string)(retVal string){
@@ -164,7 +177,7 @@ func (this VaultClient)Seal() ( err error){
 
 func (this VaultClient) SetValue(secretPath string, secretValue string) ( err error){
 
-	dataToSet := DataToSet{secretValue}
+	dataToSet := NewVaultData(secretValue)
 	this.log.Debug("Set secret " + secretPath)
 	if this.Token == "" {
 		err = fmt.Errorf("Not authorized")
@@ -173,7 +186,7 @@ func (this VaultClient) SetValue(secretPath string, secretValue string) ( err er
 
 		var u *url.URL
 		u, err = url.Parse(this.ServerURL)
-		u.Path = path.Join(u.Path, "v1", "secret",secretPath)
+		u.Path = path.Join(u.Path, "v1", "secret","data",secretPath)
 		var body []byte
 		body,err = json.Marshal(dataToSet)
 		_, err = http.Put().Execute( u.String(), map[string]string{ "X-Vault-Token":" " + this.Token}, body )
@@ -190,9 +203,9 @@ func (this VaultClient) GetValue(secretPath string) (retVal string, err error){
 		var u *url.URL
 		u, err = url.Parse(this.ServerURL)
 		if this.UserDomain != "" {
-			u.Path = path.Join(u.Path, "v1", "secret",this.UserDomain,secretPath)
+			u.Path = path.Join(u.Path, "v1", "secret","data",this.UserDomain,secretPath)
 		}else{
-			u.Path = path.Join(u.Path, "v1", "secret",secretPath)
+			u.Path = path.Join(u.Path, "v1", "secret","data",secretPath)
 		}
 
 		var response []byte
@@ -201,9 +214,11 @@ func (this VaultClient) GetValue(secretPath string) (retVal string, err error){
 
 		if err == nil {
 			var parsedJson *gabs.Container
+			print(string(response))
 			parsedJson,err = gabs.ParseJSON(response)
 
-			retVal = parsedJson.Path("data.key").Data().(string)
+			retValMap := parsedJson.Path("data.data").Data().(map[string]interface{})
+			retVal = retValMap["key"].(string)
 		}
 	}
 	return retVal,err

@@ -1,0 +1,210 @@
+{
+  "Gem98-9": {
+    "MinerName": "Gem98-9",
+    "Currency": "",
+    "RunningTime": "",
+    "Hashrate": ["", ""],
+    "MiningPool": ["", ""],
+    "Cards": []
+  },
+  "gem0": {
+    "MinerName": "gem0",
+    "Currency": "",
+    "RunningTime": "",
+    "Hashrate": ["", ""],
+    "MiningPool": ["", ""],
+    "Cards": []
+  },
+  "gem1": {
+    "MinerName": "gem1",
+    "Currency": "",
+    "RunningTime": "19:04 (0)",
+    "Hashrate": ["356.520", "0.000"],
+    "MiningPool": ["eu1.ethermine.org:5555 (0)", "  (0)"],
+    "Cards": [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
+  },
+  "gem2": {
+    "MinerName": "gem2",
+    "Currency": "",
+    "RunningTime": "98:47 (0)",
+    "Hashrate": ["343.078", "0.000"],
+    "MiningPool": ["eu1.ethermine.org:5555 (2)", "  (0)"],
+    "Cards": [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
+  },
+  "gem3": {
+    "MinerName": "gem3",
+    "Currency": "",
+    "RunningTime": "30:57 (1)",
+    "Hashrate": ["320.377", "0.000"],
+    "MiningPool": ["eu1.ethermine.org:5555 (0)", "  (0)"],
+    "Cards": [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
+  },
+  "gem4[t]": {
+    "MinerName": "gem4[t]",
+    "Currency": "",
+    "RunningTime": "90:15 (1)",
+    "Hashrate": ["114.894", "0.000"],
+    "MiningPool": ["eu1.ethermine.org:5555 (1)", "  (0)"],
+    "Cards": [{}, {}, {}, {}]
+  },
+  "gem5": {
+    "MinerName": "gem5",
+    "Currency": "",
+    "RunningTime": "98:47 (0)",
+    "Hashrate": ["337.951", "0.000"],
+    "MiningPool": ["eu1.ethermine.org:5555 (1)", "  (0)"],
+    "Cards": [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
+  },
+  "gem6": {
+    "MinerName": "gem6",
+    "Currency": "",
+    "RunningTime": "02:27 (8)",
+    "Hashrate": ["329.024", "0.000"],
+    "MiningPool": ["eu1.ethermine.org:5555 (0)", "  (0)"],
+    "Cards": [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
+  },
+  "gem8": {
+    "MinerName": "gem8",
+    "Currency": "",
+    "RunningTime": "",
+    "Hashrate": ["", ""],
+    "MiningPool": ["", ""],
+    "Cards": []
+  },
+  "gem99-vg": {
+    "MinerName": "gem99-vg",
+    "Currency": "",
+    "RunningTime": "",
+    "Hashrate": ["", ""],
+    "MiningPool": ["", ""],
+    "Cards": []
+  },
+  "gemb62": {
+    "MinerName": "gemb62",
+    "Currency": "",
+    "RunningTime": "67:59 (1)",
+    "Hashrate": ["326.817", "0.000"],
+    "MiningPool": ["eu1.ethermine.org:5555 (1)", "  (0)"],
+    "Cards": [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
+  },
+  "gemb63": {
+    "MinerName": "gemb63",
+    "Currency": "",
+    "RunningTime": "20:12 (1)",
+    "Hashrate": ["354.191", "0.000"],
+    "MiningPool": ["eu1.ethermine.org:5555 (0)", "  (0)"],
+    "Cards": [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
+  },
+  "gemb64": {
+    "MinerName": "gemb64",
+    "Currency": "",
+    "RunningTime": "20:31 (1)",
+    "Hashrate": ["270.644", "0.000"],
+    "MiningPool": ["eu1.ethermine.org:5555 (0)", "  (0)"],
+    "Cards": [{}, {}, {}, {}, {}, {}, {}, {}, {}]
+  },
+  "gemb65": {
+    "MinerName": "gemb65",
+    "Currency": "",
+    "RunningTime": "98:47 (0)",
+    "Hashrate": ["351.068", "0.000"],
+    "MiningPool": ["eu1.ethermine.org:5555 (1)", "  (0)"],
+    "Cards": [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
+  },
+  "gemb66": {
+    "MinerName": "gemb66",
+    "Currency": "",
+    "RunningTime": "65:35 (1)",
+    "Hashrate": ["348.065", "0.000"],
+    "MiningPool": ["eu1.ethermine.org:5555 (1)", "  (0)"],
+    "Cards": [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
+  },
+  "gemb67": {
+    "MinerName": "gemb67",
+    "Currency": "",
+    "RunningTime": "13:13 (4)",
+    "Hashrate": ["344.277", "0.000"],
+    "MiningPool": ["eu1.ethermine.org:5555 (0)", "  (0)"],
+    "Cards": [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
+  },
+  "gemb68": {
+    "MinerName": "gemb68",
+    "Currency": "",
+    "RunningTime": "29:03 (3)",
+    "Hashrate": ["330.972", "0.000"],
+    "MiningPool": ["eu1.ethermine.org:5555 (0)", "  (0)"],
+    "Cards": [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
+  },
+  "gemb69": {
+    "MinerName": "gemb69",
+    "Currency": "",
+    "RunningTime": "98:47 (0)",
+    "Hashrate": ["354.429", "0.000"],
+    "MiningPool": ["eu1.ethermine.org:5555 (1)", "  (0)"],
+    "Cards": [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
+  },
+  "gemb70": {
+    "MinerName": "gemb70",
+    "Currency": "",
+    "RunningTime": "98:47 (0)",
+    "Hashrate": ["352.900", "0.000"],
+    "MiningPool": ["eu1.ethermine.org:5555 (1)", "  (0)"],
+    "Cards": [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
+  },
+  "gemb71": {
+    "MinerName": "gemb71",
+    "Currency": "",
+    "RunningTime": "97:03 (1)",
+    "Hashrate": ["363.171", "0.000"],
+    "MiningPool": ["eu1.ethermine.org:5555 (1)", "  (0)"],
+    "Cards": [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
+  },
+  "gemb72": {
+    "MinerName": "gemb72",
+    "Currency": "",
+    "RunningTime": "98:47 (0)",
+    "Hashrate": ["350.272", "0.000"],
+    "MiningPool": ["eu1.ethermine.org:5555 (1)", "  (0)"],
+    "Cards": [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
+  },
+  "gemb73": {
+    "MinerName": "gemb73",
+    "Currency": "",
+    "RunningTime": "",
+    "Hashrate": ["", ""],
+    "MiningPool": ["", ""],
+    "Cards": []
+  },
+  "gemb98": {
+    "MinerName": "gemb98",
+    "Currency": "",
+    "RunningTime": "",
+    "Hashrate": ["", ""],
+    "MiningPool": ["", ""],
+    "Cards": []
+  },
+  "gemb99": {
+    "MinerName": "gemb99",
+    "Currency": "",
+    "RunningTime": "26:41 (4)",
+    "Hashrate": ["244.474", "0.000"],
+    "MiningPool": ["eu1.ethermine.org:5555 (1)", "  (0)"],
+    "Cards": [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
+  },
+  "note": {
+    "MinerName": "note",
+    "Currency": "",
+    "RunningTime": "",
+    "Hashrate": ["", ""],
+    "MiningPool": ["", ""],
+    "Cards": []
+  },
+  "notes2": {
+    "MinerName": "notes2",
+    "Currency": "",
+    "RunningTime": "",
+    "Hashrate": ["", ""],
+    "MiningPool": ["", ""],
+    "Cards": []
+  }
+}

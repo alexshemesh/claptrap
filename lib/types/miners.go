@@ -44,9 +44,13 @@ func (this *MinerEntry) SetFieldForIndex(data string, index int) {
 	} else if index == 2 {
 		this.RunningTime = data
 	} else if index == 3 {
-		this.Hashrate[0] = data
+		if indexOfSub := strings.Index(data, "/s"); indexOfSub != -1{
+			this.Hashrate[0] = data[0:indexOfSub - 3]
+		}
 	} else if index == 4 {
-		this.Hashrate[1] = data
+		if indexOfSub := strings.Index(data, "/s"); indexOfSub != -1{
+			this.Hashrate[1] = data[0:indexOfSub - 3]
+		}
 	} else if index == 6 {
 		minerpools := strings.Split(data, ";")
 		this.MiningPool[0] = minerpools[0]
@@ -60,6 +64,6 @@ func (this *MinerEntry) SetFieldForIndex(data string, index int) {
 }
 
 func (miner MinerEntry) ShortDesc() (retVal string) {
-	retVal = fmt.Sprintf("%s %s Num Of Cards: %d\r\t%s, %s\r\t%s, %s\r", miner.MinerName,miner.RunningTime, len(miner.Cards), miner.MiningPool[0],miner.Hashrate[0],miner.MiningPool[1], miner.Hashrate[1])
+	retVal = fmt.Sprintf("%s %s Num Of Cards: %d\r\t%s, %s\r\t%s, %s\rn", miner.MinerName,miner.RunningTime, len(miner.Cards), miner.MiningPool[0],miner.Hashrate[0],miner.MiningPool[1], miner.Hashrate[1])
 	return retVal
 }

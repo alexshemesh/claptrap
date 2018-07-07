@@ -12,6 +12,8 @@ import (
 	"github.com/Jeffail/gabs"
 	"os"
 	"github.com/alexshemesh/claptrap/lib/types"
+	"encoding/json"
+	"github.com/stretchr/testify/assert"
 )
 
 func Test_vaultIsInitialized_true(t *testing.T){
@@ -185,9 +187,9 @@ func Test_vaultSeal(t *testing.T){
 }
 
 func Test_vaultSetSecret(t *testing.T){
-	path := "path/to/secret"
+	path := "/v1/secret/data/path/to/secret"
 	echoHandler := func(w http.ResponseWriter, r *http.Request) {
-		pathToCheck := "/v1/secret/" + path
+		pathToCheck := "/v1/secret/data" + path
 		if r.URL.Path == pathToCheck && r.Method == "PUT" {
 			token := r.Header.Get("X-Vault-Token")
 			if token != "" {
@@ -215,9 +217,9 @@ func Test_vaultSetSecret(t *testing.T){
 
 func Test_vaultGetSecret(t *testing.T){
 	path := "path/to/secret"
-	secretValue := `{"data":{"key":"somevalue"}}`
+	secretValue := `{"data":{"data":{"key":"somevalue"}}}`
 	echoHandler := func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path == "/v1/secret/" + path && r.Method == "GET" {
+		if r.URL.Path == "/v1/secret/data/" + path && r.Method == "GET" {
 			token := r.Header.Get("X-Vault-Token")
 			if token != "" {
 				io.WriteString(w, secretValue)
@@ -341,3 +343,13 @@ func XTestIntegration_CreateUser(t *testing.T){
 	}
 }
 
+func Test_EncodeVaultData(t *testing.T){
+	data := NewVaultData("test")
+	resMarshaled,err := json.Marshal(data)
+	assert.NoError(t,err)
+
+	var resultData DataToSet
+	err = json.Unmarshal(resMarshaled,&resultData)
+	assert.NoError(t,err)
+	assert.Equal(t,"test",resultData.Data.Key)
+}

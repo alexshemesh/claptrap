@@ -62,5 +62,6 @@ func runPing(log logs.Logger, settingsHandler types.Settings)(err error){
 	if err == nil {
 		log.Log("Telegram ping returns OK")
 	}
+	telegramBot.CheckUpdates()
 	return err
 }
