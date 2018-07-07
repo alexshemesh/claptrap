@@ -70,9 +70,9 @@ func runMinersCheck(log logs.Logger,settings types.Settings,auth types.Auth)(err
 	//-1001187769131 - Poti ops
 	var newMsg tgbotapi.MessageConfig
 	if err != nil {
-		newMsg = tgbotapi.NewMessage(-318863783, err.Error())
+		newMsg = tgbotapi.NewMessage(-1001187769131, err.Error())
 	}else if res != true{
-		newMsg = tgbotapi.NewMessage(-318863783, strings.Join(reasons, "\n"))
+		newMsg = tgbotapi.NewMessage(-1001187769131, strings.Join(reasons, "\n"))
 	}
 
 	if newMsg.ChatID != 0 {
