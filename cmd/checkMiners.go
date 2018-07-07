@@ -26,6 +26,8 @@ import (
 	"gopkg.in/telegram-bot-api.v4"
 	"strings"
 	"time"
+
+	"strconv"
 )
 
 // checkMinersCmd represents the checkMiners command
@@ -66,16 +68,18 @@ func runMinersCheck(log logs.Logger,settings types.Settings,auth types.Auth)(err
 
 	claymoreClient := claymore.NewClaymoreManagerClient(log, settings)
 	res,reasons, err := claymoreClient.CheckAndCompare()
+	channel,err := settings.GetValue("telegram/channel")
+	channelInt,err := strconv.ParseInt(channel,10,64)
 	//-1001344868791
 	//-1001187769131 - Poti ops
 	var newMsg tgbotapi.MessageConfig
 	if err != nil {
-		newMsg = tgbotapi.NewMessage(-1001187769131, err.Error())
+		newMsg = tgbotapi.NewMessage(channelInt, err.Error())
 	}else if res != true{
-		newMsg = tgbotapi.NewMessage(-1001187769131, strings.Join(reasons, "\n"))
+		newMsg = tgbotapi.NewMessage(channelInt, strings.Join(reasons, "\n"))
 	}
 
-	if newMsg.ChatID != 0 {
+	if newMsg.Text != "" {
 		err = telegramBot.Send(newMsg)
 	}
 
